@@ -1,0 +1,97 @@
+#directive #@length(max: Int!) on INPUT_FIELD_DEFINITION
+scalar Date
+
+type Query {
+    login(cardId: String!, password: String!) : AccessResponse
+    greeting(name: String): String
+}
+
+type Mutation {
+    registerStudent(newStudent: StudentInput!, password: String) : Boolean
+    registerEmployee(newEmployee: EmployeeInput!, password: String): Boolean
+    refreshToken(accessToken: String!): AccessResponse
+    logout: Boolean
+}
+
+enum Role {
+    STUDENT
+    EMPLOYEE
+}
+
+interface User {
+    id: ID!
+    roles: [Role!]
+    surname: String
+    name: String
+    patronymic: String
+    birthdate: Date
+    cardId: String
+
+    #TODO: phone
+    #TODO: address
+}
+
+type Student implements User {
+    id: ID!
+    roles: [Role!]
+    surname: String
+    name: String
+    patronymic: String
+    surnameBy: String
+    nameBy: String
+    patronymicBy: String
+    birthdate: Date
+    cardId: String
+    graduationYear: Int
+    gradePointAverage: Float
+    hasGoldMedal: Boolean
+    wasInMilitary: Boolean
+    isStudentUnionMember: Boolean
+    aboutCollege: String
+    hobbies: String
+    #TODO: parents
+}
+
+type Employee implements User {
+    id: ID!
+    roles: [Role!]
+    surname: String
+    name: String
+    patronymic: String
+    birthdate: Date
+    cardId: String
+}
+
+input StudentInput {
+    cardId: String! #@length(max: 64)
+    surname: String! #@length(max: 40)
+    name: String! #@length(max: 40)
+    patronymic: String #@length(max: 40)
+    surnameBy: String #@length(max: 40)
+    nameBy: String #@length(max: 40)
+    patronymicBy: String #@length(max: 40)
+    birthdate: Date!
+    graduationYear: Int!
+    gradePointAverage: Float!
+    hasGoldMedal: Boolean!
+    wasInMilitary: Boolean!
+    isStudentUnionMember: Boolean!
+    aboutCollege: String #@length(max: 256)
+    hobbies: String #@length(max: 256)
+}
+
+input EmployeeInput {
+    cardId: String! #@length(max: 64)
+    surname: String! #@length(max: 40)
+    name: String! #@length(max: 40)
+    patronymic: String #@length(max: 40)
+    birthdate: Date!
+}
+
+union UsersUnion = Student | Employee
+
+type AccessResponse {
+    accessToken: String!
+    user: UsersUnion
+}
+
