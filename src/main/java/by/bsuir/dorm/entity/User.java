@@ -1,7 +1,10 @@
 package by.bsuir.dorm.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +13,9 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,15 +25,15 @@ import java.util.stream.Collectors;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private UUID id;
 
     @Column(name = "card_id", nullable = false, unique = true, length = 64)
     private String cardId;
 
-    @Column(name = "password_hash", nullable = false, length = 60)
-    private String passwordHash;
+    @Column(name = "password", nullable = false, length = 60)
+    private String password;
 
     @Column(name = "password_need_reset")
     private Boolean passwordNeedReset;
@@ -47,50 +50,51 @@ public class User implements UserDetails {
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserRoles> roleOrdinals = new LinkedHashSet<>();
-
-
     //TODO: phone
 
     //TODO: address
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "m2m_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roleOrdinals
+        return roles
                 .stream()
-                .map(r -> new SimpleGrantedAuthority())
+                .map(role -> new SimpleGrantedAuthority(role.getName().toUpperCase()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return id.toString();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

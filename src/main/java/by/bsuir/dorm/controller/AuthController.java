@@ -7,9 +7,8 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 @Controller
 public class AuthController {
-
-    @QueryMapping
     @PreAuthorize("isAuthenticated()")
+    @QueryMapping
     public String greeting(@Argument String name) {
         return "Hello, " + name;
     }
