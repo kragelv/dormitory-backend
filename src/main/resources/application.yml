@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: dorm
+  datasource:
+    url: jdbc:mysql://identity-db/dormitory
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        jdbc:
+          time_zone: UTC
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+server:
+  error:
+    include-stacktrace: never
+app:
+  security:
+    access-token:
+      lifetime: ${ACCESS_TOKEN_LIFETIME}
+      b64-secret: ${ACCESS_TOKEN_SECRET}
+    refresh-token:
+      lifetime: ${REFRESH_TOKEN_LIFETIME}
+      b64-secret: ${REFRESH_TOKEN_SECRET}
+    audiences:
+      - name: ${spring.application.name}
+  email-confirmation:
+    confirm-url: ${EMAIL_CONFIRMATION_URL}
+    lifetime: ${EMAIL_CONFIRMATION_TOKEN_LIFETIME}
+  password-reset:
+    reset-url: ${PASSWORD_RESET_URL}
+    lifetime: ${PASSWORD_RESET_LIFETIME}

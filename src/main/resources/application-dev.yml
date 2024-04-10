@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:dormitory
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  liquibase:
+    enabled: false
+app:
+  security:
+    access-token:
+      b64-secret: YWNjZXNzLXNlY3JldC1kZXY=
+      lifetime: 120 #2 minutes
+    refresh-token:
+      b64-secret: cmVmcmVzaC1zZWNyZXQtZGV2
+      lifetime: 604800 #7 days
+  email-confirmation:
+    confirm-url: http://localhost/email-confirm
+    lifetime: 10800 #3 hours
+  password-reset:
+    reset-url: http://localhost/password-reset
+    lifetime: 1800 #30 minutes
