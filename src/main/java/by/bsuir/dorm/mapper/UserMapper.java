@@ -16,7 +16,10 @@ import org.mapstruct.SubclassMapping;
 @Mapper(
         componentModel = "spring",
         subclassExhaustiveStrategy = SubclassExhaustiveStrategy.RUNTIME_EXCEPTION,
-        uses = {StudentMapper.class, ExtensionsMapper.class}
+        uses = {
+                StudentMapper.class,
+                EmployeeMapper.class
+        }
 )
 public interface UserMapper {
     @SubclassMapping(source = Student.class, target = PersonalStudentDto.class)

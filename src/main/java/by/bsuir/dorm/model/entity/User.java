@@ -2,10 +2,7 @@ package by.bsuir.dorm.model.entity;
 
 import by.bsuir.dorm.model.listener.UserListener;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,26 +38,29 @@ public abstract class User implements UserDetails {
     @Column(name = "password_need_reset")
     private Boolean passwordNeedReset;
 
-    @Column(name = "email", length = 128) //TODO: implement unique with nulls
+    @Column(name = "email", length = 128)
     private String email;
 
     @Column(name = "email_confirmed")
     private Boolean emailConfirmed;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "surname", column = @Column(name = "surname", length = 40, nullable = false)),
+            @AttributeOverride(name = "name", column = @Column(name = "name", length = 40, nullable = false))
+    })
     private FullName fullName;
 
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    //TODO: phone
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    private Phone phone;
 
-    //TODO: address
-
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "m2m_student_role",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "m2m_user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles = new LinkedHashSet<>();
 
     public abstract String getTypename();

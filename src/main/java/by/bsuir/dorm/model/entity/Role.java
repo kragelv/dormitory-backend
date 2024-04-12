@@ -2,17 +2,12 @@ package by.bsuir.dorm.model.entity;
 
 import by.bsuir.dorm.model.listener.RoleListener;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SortNatural;
 
-import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +24,7 @@ public class Role implements Comparable<Role> {
     private Integer id;
 
     @NaturalId
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name", nullable = false, unique = true, length = 64)
     private String name;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
@@ -38,6 +33,24 @@ public class Role implements Comparable<Role> {
             inverseJoinColumns = @JoinColumn(name = "user_type_id"))
     @SortNatural
     private SortedSet<UserType> compatibleUserTypes = new TreeSet<>();
+
+    @ManyToMany(
+            mappedBy = "roles",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
+    @Setter(AccessLevel.NONE)
+    private List<User> users = new ArrayList<>();
+
+    public void addUser(User user) {
+        users.add(user);
+        user.getRoles().add(this);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.getRoles().remove(this);
+    }
+
 
     @Override
     public boolean equals(Object o) {

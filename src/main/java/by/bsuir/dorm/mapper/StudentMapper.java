@@ -24,7 +24,7 @@ public interface StudentMapper {
     @Mapping(target = "fullNameBy.surname", source = "surnameBy")
     @Mapping(target = "fullNameBy.name", source = "nameBy")
     @Mapping(target = "fullNameBy.patronymic", source = "patronymicBy")
-    Student toEntity(RegisterStudentRequestDto studentInput);
+    Student toEntity(RegisterStudentRequestDto dto);
 
     PersonalStudentDto toPersonalDto(Student student);
 

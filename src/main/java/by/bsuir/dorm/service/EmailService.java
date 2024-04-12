@@ -11,4 +11,6 @@ public interface EmailService {
     void sendConfirmation(String username, EmailSendRequestDto dto);
 
     void confirmEmail(String username, EmailConfirmationRequestDto dto);
+
+    Boolean isAvailable(EmailSendRequestDto dto);
 }

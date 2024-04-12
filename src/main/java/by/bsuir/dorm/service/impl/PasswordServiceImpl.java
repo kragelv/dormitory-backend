@@ -14,7 +14,6 @@ import by.bsuir.dorm.service.PasswordService;
 import by.bsuir.dorm.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +47,7 @@ public class PasswordServiceImpl implements PasswordService {
 
     @Override
     public void sendToken(PasswordSendRequestDto dto) {
+
         final String email = dto.email();
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new UserNotFoundException("Invalid email: " + email));

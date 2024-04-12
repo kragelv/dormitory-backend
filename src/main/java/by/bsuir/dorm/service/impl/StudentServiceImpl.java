@@ -3,7 +3,6 @@ package by.bsuir.dorm.service.impl;
 import by.bsuir.dorm.dao.UserRepository;
 import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.mapper.StudentMapper;
-import by.bsuir.dorm.mapper.UserMapper;
 import by.bsuir.dorm.model.entity.Student;
 import by.bsuir.dorm.service.StudentService;
 import lombok.RequiredArgsConstructor;

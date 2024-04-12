@@ -116,6 +116,11 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(EmailNotAvailableException.class)
+    public ErrorResponseEntity handleEmailNotAvailableException(final EmailNotAvailableException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(EmailConfirmationException.class)
     public ErrorResponseEntity handleEmailConfirmationException(final EmailConfirmationException ex) {
         return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);

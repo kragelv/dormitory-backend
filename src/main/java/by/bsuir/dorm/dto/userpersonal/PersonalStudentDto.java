@@ -29,6 +29,7 @@ public class PersonalStudentDto extends PersonalUserDto {
                               FullNameDto fullName,
                               LocalDate birthdate,
                               String cardId,
+                              String phoneNumber,
                               Boolean passwordNeedReset,
                               String email,
                               Boolean emailConfirmed,
@@ -40,7 +41,7 @@ public class PersonalStudentDto extends PersonalUserDto {
                               Boolean isStudentUnionMember,
                               String aboutCollege,
                               String hobbies) {
-        super(typename, id, roles, fullName, birthdate, cardId, passwordNeedReset, email, emailConfirmed);
+        super(typename, id, roles, fullName, birthdate, cardId, phoneNumber, passwordNeedReset, email, emailConfirmed);
         this.fullNameBy = fullNameBy;
         this.graduationYear = graduationYear;
         this.gradePointAverage = gradePointAverage;

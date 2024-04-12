@@ -2,10 +2,7 @@ package by.bsuir.dorm.model.entity;
 
 import by.bsuir.dorm.model.listener.UserTypeListener;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SortNatural;
@@ -29,7 +26,7 @@ public class UserType implements Comparable<UserType> {
     private Integer id;
 
     @NaturalId
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name", nullable = false, unique = true, length = 64)
     private String name;
 
     @ManyToMany(
@@ -37,6 +34,7 @@ public class UserType implements Comparable<UserType> {
             cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE}
     )
     @SortNatural
+    @Setter(AccessLevel.NONE)
     private SortedSet<Role> roles = new TreeSet<>();
 
     public void addRole(Role role) {
@@ -44,7 +42,7 @@ public class UserType implements Comparable<UserType> {
         role.getCompatibleUserTypes().add(this);
     }
 
-    public void removeAddress(Role role) {
+    public void removeRole(Role role) {
         roles.remove(role);
         role.getCompatibleUserTypes().remove(this);
     }

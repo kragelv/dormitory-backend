@@ -6,6 +6,7 @@ import by.bsuir.dorm.dao.UserTokenRepository;
 import by.bsuir.dorm.dto.request.EmailConfirmationRequestDto;
 import by.bsuir.dorm.dto.request.EmailSendRequestDto;
 import by.bsuir.dorm.exception.EmailConfirmationException;
+import by.bsuir.dorm.exception.EmailNotAvailableException;
 import by.bsuir.dorm.exception.UserNotFoundException;
 import by.bsuir.dorm.model.TokenPurpose;
 import by.bsuir.dorm.model.entity.User;
@@ -53,6 +54,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendConfirmation(String username, EmailSendRequestDto dto) {
+        final String email = dto.email();
+        if (userRepository.existsByEmailIgnoreCase(email))
+            throw new EmailNotAvailableException("Email '" + email + "' is not available");
         User user = userSecurityService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
         final SecureRandom random = RandomUtil.getSecureRandom();
@@ -68,12 +72,12 @@ public class EmailServiceImpl implements EmailService {
                 .putLong(tokenId.getMostSignificantBits())
                 .put(tokenRandomStamp);
         final String tokenValue = Base64.getUrlEncoder().encodeToString(tokenBytes);
-        user.setEmail(dto.email());
+        user.setEmail(email);
         user.setEmailConfirmed(false);
         log.info("Send confirmation email for User { id = " + user.getId() +
                 ", e-mail = " + user.getEmail() +" } : "  + tokenValue);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(dto.email());
+        mailMessage.setTo(email);
         mailMessage.setSubject("Confirm E-mail");
         final String confirmUri = UriComponentsBuilder
                 .fromHttpUrl(appProperties.getEmailConfirmation().getConfirmUrl())
@@ -122,5 +126,10 @@ public class EmailServiceImpl implements EmailService {
         user.setEmailConfirmed(true);
         userRepository.save(user);
         userTokenRepository.deleteAllByPurposeAndUser(TokenPurpose.EMAIL, user);
+    }
+
+    @Override
+    public Boolean isAvailable(EmailSendRequestDto dto) {
+        return !userRepository.existsByEmailIgnoreCase(dto.email());
     }
 }

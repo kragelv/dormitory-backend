@@ -1,9 +1,6 @@
 package by.bsuir.dorm.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +11,11 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "tbl_employee")
-@PrimaryKeyJoinColumn(name="user_id")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Employee extends User {
+    @Column(name = "residential_address", nullable = false, length = 255)
+    private String residentialAddress;
+
     @Override
     @Transient
     public String getTypename() {

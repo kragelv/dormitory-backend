@@ -7,9 +7,12 @@ import by.bsuir.dorm.mapper.UserTypeMapper;
 import by.bsuir.dorm.model.entity.*;
 import by.bsuir.dorm.util.RoleUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -29,14 +32,10 @@ public class DbDataConfig {
         Student studentEmpty = new Student();
         Employee employeeEmpty = new Employee();
         seedUserTypes(List.of(studentEmpty, employeeEmpty));
-        List<String> employeeRoleNames = prefixRoles(List.of("ADMIN", "NIGHT_DUTY", "HEAD"));
+        List<String> employeeRoleNames = prefixRoles(List.of("ADMIN", "NIGHT_DUTY", "HEAD", "CARETAKER", "DIRECTOR"));
         seedRoles(employeeRoleNames);
-        List<String> studentRoleNames = prefixRoles(List.of("TEST"));
-        seedRoles(studentRoleNames);
         userTypeRepository.findBySimpleNaturalId(employeeEmpty.getTypename()).ifPresent(employee ->
                 seedAssociationRoleUserType(employee, employeeRoleNames));
-        userTypeRepository.findBySimpleNaturalId(studentEmpty.getTypename()).ifPresent(student ->
-                seedAssociationRoleUserType(student, studentRoleNames));
     }
 
     private List<String> prefixRoles(List<String> roles) {
@@ -76,5 +75,20 @@ public class DbDataConfig {
         for (Role associationRole : associationRoles) {
             userType.addRole(associationRole);
         }
+    }
+
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy(
+                "ROLE_ADMIN > ROLE_DIRECTOR\n" +
+                "ROLE_ADMIN > ROLE_HEAD\n" +
+                "ROLE_ADMIN > ROLE_CARETAKER\n" +
+                "ROLE_DIRECTOR > TYPE_EMPLOYEE\n" +
+                "ROLE_HEAD > TYPE_EMPLOYEE\n" +
+                "ROLE_CARETAKER > TYPE_EMPLOYEE\n" +
+                "ROLE_NIGHT_DUTY > TYPE_EMPLOYEE\n");
+        return hierarchy;
     }
 }

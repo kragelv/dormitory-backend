@@ -19,8 +19,10 @@ public abstract class PersonalUserDto {
     private final FullNameDto fullName;
     private final LocalDate birthdate;
     private final String cardId;
+    private final String phoneNumber;
     private final Boolean passwordNeedReset;
     private final String email;
     private final Boolean emailConfirmed;
+
 }
 

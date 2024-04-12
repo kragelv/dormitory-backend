@@ -13,6 +13,8 @@ import java.util.UUID;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class PersonalEmployeeDto extends PersonalUserDto {
+    String residentialAddress;
+
     @Builder
     public PersonalEmployeeDto(String typename,
                                UUID id,
@@ -20,9 +22,12 @@ public class PersonalEmployeeDto extends PersonalUserDto {
                                FullNameDto fullName,
                                LocalDate birthdate,
                                String cardId,
+                               String phoneNumber,
                                Boolean passwordNeedReset,
                                String email,
-                               Boolean emailConfirmed) {
-        super(typename, id, roles, fullName, birthdate, cardId, passwordNeedReset, email, emailConfirmed);
+                               Boolean emailConfirmed,
+                               String residentialAddress) {
+        super(typename, id, roles, fullName, birthdate, cardId, phoneNumber, passwordNeedReset, email, emailConfirmed);
+        this.residentialAddress = residentialAddress;
     }
 }

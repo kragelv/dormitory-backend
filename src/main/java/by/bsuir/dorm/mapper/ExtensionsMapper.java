@@ -1,6 +1,7 @@
 package by.bsuir.dorm.mapper;
 
 import by.bsuir.dorm.dao.RoleRepository;
+import by.bsuir.dorm.exception.RoleNotFoundException;
 import by.bsuir.dorm.model.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
@@ -13,6 +14,10 @@ public class ExtensionsMapper {
 
     @Named("roleNameToRoleRef")
     public Role roleNameToRoleRef(String name) {
-        return roleRepository.getReferenceBySimpleNaturalId(name);
+        final Role roleRef = roleRepository.getReferenceBySimpleNaturalId(name);
+        if (roleRef == null) {
+            throw new RoleNotFoundException("Role { name = '" + name + "' } doesn't exist");
+        }
+        return roleRef;
     }
 }

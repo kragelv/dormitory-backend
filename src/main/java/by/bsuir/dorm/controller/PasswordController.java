@@ -17,14 +17,14 @@ public class PasswordController {
 
     @PostMapping("/send")
     @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void sendToken(@Valid @RequestBody PasswordSendRequestDto dto){
         passwordService.sendToken(dto);
     }
 
     @PostMapping("/change")
     @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@Valid @RequestBody PasswordChangeRequestDto dto) {
         passwordService.changePassword(dto);
     }

@@ -2,10 +2,10 @@ package by.bsuir.dorm.controller;
 
 import by.bsuir.dorm.dto.request.LoginUserRequestDto;
 import by.bsuir.dorm.dto.request.RefreshTokenRequestDto;
-import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
+import by.bsuir.dorm.dto.request.RegisterEmployeeRequestDto;
 import by.bsuir.dorm.dto.response.AccessResponseDto;
 import by.bsuir.dorm.service.AuthService;
-import by.bsuir.dorm.service.StudentService;
+import by.bsuir.dorm.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -23,21 +23,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final StudentService studentService;
+    private final EmployeeService employeeService;
 
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/register")
-    public ResponseEntity<UUID> registerStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
-        final UUID id = studentService.register(dto);
+    @PostMapping("/register-employee")
+    public ResponseEntity<UUID> registerEmployee(@Valid @RequestBody RegisterEmployeeRequestDto dto) {
+        final UUID id = employeeService.register(dto);
         return ResponseEntity.created(
                         ServletUriComponentsBuilder
-                                .fromPath("/api/graphql")
+                                .fromPath("/api/v1/users/{id}")
                                 .buildAndExpand(id)
                                 .encode()
                                 .toUri())
                 .body(id);
     }
-
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
