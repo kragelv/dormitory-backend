@@ -27,7 +27,7 @@ public class ApplicationConfig {
                     throw new UsernameNotFoundException("Invalid user id: " + username);
                 }
                 return userRepository.findById(id)
-                        .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found\n"));
+                        .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
             }
         };
     }

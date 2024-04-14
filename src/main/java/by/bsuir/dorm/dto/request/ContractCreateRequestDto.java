@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 public record ContractCreateRequestDto(
-        @NotBlank
+        @NotBlankIfPresent
         @Size(max = 64)
         String cardId,
 
@@ -45,6 +45,10 @@ public record ContractCreateRequestDto(
         @NotBlank
         @Size(max = 255)
         String residentialAddress,
+
+        @NotNull
+        @PositiveOrZero
+        Integer roomNumber,
 
         @NotNull
         LocalDate startDate,

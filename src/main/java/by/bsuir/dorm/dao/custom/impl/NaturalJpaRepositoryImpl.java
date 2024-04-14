@@ -15,8 +15,7 @@ import java.util.Optional;
 @Transactional
 public class NaturalJpaRepositoryImpl<T, ID extends Serializable, NID>
         extends SimpleJpaRepository<T, ID>
-        implements NaturalJpaRepository<T, ID, NID>
-{
+        implements NaturalJpaRepository<T, ID, NID> {
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -45,18 +44,22 @@ public class NaturalJpaRepositoryImpl<T, ID extends Serializable, NID>
 
     @Override
     @Transactional(readOnly = true)
-    public T getReferenceBySimpleNaturalId(NID naturalId) {
-        return entityManager.unwrap(Session.class)
-                .bySimpleNaturalId(this.getDomainClass())
-                .getReference(naturalId);
+    public Optional<T> getReferenceBySimpleNaturalId(NID naturalId) {
+        return Optional.ofNullable(
+                entityManager.unwrap(Session.class)
+                        .bySimpleNaturalId(this.getDomainClass())
+                        .getReference(naturalId)
+        );
     }
 
     @Override
     @Transactional(readOnly = true)
-    public T getReferenceByNaturalId(Map<String, ?> naturalId) {
-        return entityManager.unwrap(Session.class)
+    public Optional<T> getReferenceByNaturalId(Map<String, ?> naturalId) {
+        return Optional.ofNullable(
+                entityManager.unwrap(Session.class)
                 .byNaturalId(this.getDomainClass())
                 .using(naturalId)
-                .getReference();
+                .getReference()
+        );
     }
 }

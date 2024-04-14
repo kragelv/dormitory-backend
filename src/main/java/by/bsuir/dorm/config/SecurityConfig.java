@@ -3,6 +3,11 @@ package by.bsuir.dorm.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -70,9 +75,31 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Profile("dev")
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web
                 .ignoring()
                 .requestMatchers("/h2-console/**");
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy(
+                "ROLE_ADMIN > ROLE_DIRECTOR\n" +
+                        "ROLE_ADMIN > ROLE_HEAD\n" +
+                        "ROLE_ADMIN > ROLE_CARETAKER\n" +
+                        "ROLE_DIRECTOR > TYPE_EMPLOYEE\n" +
+                        "ROLE_HEAD > TYPE_EMPLOYEE\n" +
+                        "ROLE_CARETAKER > TYPE_EMPLOYEE\n" +
+                        "ROLE_NIGHT_DUTY > TYPE_EMPLOYEE\n");
+        return hierarchy;
+    }
+
+    @Bean
+    static MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy);
+        return expressionHandler;
     }
 }

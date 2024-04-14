@@ -14,10 +14,8 @@ public class ExtensionsMapper {
 
     @Named("roleNameToRoleRef")
     public Role roleNameToRoleRef(String name) {
-        final Role roleRef = roleRepository.getReferenceBySimpleNaturalId(name);
-        if (roleRef == null) {
-            throw new RoleNotFoundException("Role { name = '" + name + "' } doesn't exist");
-        }
+        final Role roleRef = roleRepository.getReferenceBySimpleNaturalId(name)
+                .orElseThrow(() -> new RoleNotFoundException("Role { name = '" + name + "' } doesn't exist"));
         return roleRef;
     }
 }

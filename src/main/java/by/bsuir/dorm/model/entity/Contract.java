@@ -32,10 +32,9 @@ public class Contract {
 
     @ManyToOne(
             fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
-            optional = false
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne(
@@ -88,4 +87,12 @@ public class Contract {
 
     @Column(name = "birthplace", nullable = false, length = 255)
     private String birthplace;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
+    @Column(name = "created_by_full_name")
+    private String createdByFullName;
+
 }

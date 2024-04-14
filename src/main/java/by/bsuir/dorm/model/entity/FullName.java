@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +29,8 @@ public class FullName implements Serializable {
 
     @Override
     public String toString() {
-        return surname + " " + name + " " + patronymic;
+        return Stream.of(surname, name, patronymic)
+                .filter(s -> s != null && !s.isBlank())
+                .collect(Collectors.joining(" "));
     }
 }

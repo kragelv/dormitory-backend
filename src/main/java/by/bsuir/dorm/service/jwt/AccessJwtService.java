@@ -1,12 +1,17 @@
 package by.bsuir.dorm.service.jwt;
 
+import by.bsuir.dorm.model.entity.User;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AccessJwtService extends JwtService {
     String ACCESS_AUTHORITIES = "ath";
 
-    Claims getClaims(UserDetails user);
+    String ACCESS_EMAIL_CONFIRMED = "emc";
+
+    String ACCESS_PASSWORD_NEED_RESET = "pnr";
+
+    Claims getClaims(User user);
 
     JwtTokenValidationParameters getValidationParametersJwtAuthenticationFilter();
 

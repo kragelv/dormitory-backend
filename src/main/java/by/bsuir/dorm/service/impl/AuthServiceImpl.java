@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
         cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } logged in");
-        return new AccessResponseDto(accessToken, user.getEmailConfirmed(), user.getPasswordNeedReset());
+        return new AccessResponseDto(accessToken);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
         cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } refreshed");
-        return new AccessResponseDto(newAccessToken, user.getEmailConfirmed(), user.getPasswordNeedReset());
+        return new AccessResponseDto(newAccessToken);
     }
 
     @Override

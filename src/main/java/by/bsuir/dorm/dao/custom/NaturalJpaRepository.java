@@ -12,7 +12,7 @@ public interface NaturalJpaRepository<T, ID, NID> extends JpaRepository<T, ID> {
 
     Optional<T> findByNaturalId(Map<String, ?> naturalId);
 
-    T getReferenceBySimpleNaturalId(NID naturalId);
+    Optional<T> getReferenceBySimpleNaturalId(NID naturalId);
 
-    T getReferenceByNaturalId(Map<String, ?> naturalId);
+    Optional<T> getReferenceByNaturalId(Map<String, ?> naturalId);
 }

@@ -1,5 +1,6 @@
 package by.bsuir.dorm.service.jwt.impl;
 
+import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.service.jwt.AccessJwtService;
 import by.bsuir.dorm.service.jwt.JwtTokenValidationParameters;
 import by.bsuir.dorm.util.TokenPropertiesProvider;
@@ -46,19 +47,21 @@ public class AccessJwtServiceImpl implements AccessJwtService {
     }
 
     @Override
-    public Claims getClaims(UserDetails userDetails) {
+    public Claims getClaims(User user) {
         final Instant now = Instant.now();
         final Instant expirationTime = now.plus(tokenPropertiesProvider.getAccessToken().duration());
         return Jwts
                 .claims()
                 .add(
                         ACCESS_AUTHORITIES,
-                        userDetails.getAuthorities()
+                        user.getAuthorities()
                                 .stream()
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toSet())
                 )
-                .subject(userDetails.getUsername())
+                .add(ACCESS_EMAIL_CONFIRMED, user.getEmailConfirmed())
+                .add(ACCESS_PASSWORD_NEED_RESET, user.getPasswordNeedReset())
+                .subject(user.getUsername())
                 .audience()
                 .add(tokenPropertiesProvider.getAudiences())
                 .and()

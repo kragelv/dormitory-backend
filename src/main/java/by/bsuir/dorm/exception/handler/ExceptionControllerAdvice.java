@@ -4,9 +4,11 @@ import by.bsuir.dorm.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.PropertyAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,13 +34,22 @@ public class ExceptionControllerAdvice {
                 .build();
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ErrorResponseEntity handleMethodArgumentTypeMismatchException(
-            final MethodArgumentTypeMismatchException ex) {
+    @ExceptionHandler(PropertyAccessException.class)
+    public ErrorResponseEntity handlePropertyAccessException(
+            final PropertyAccessException ex) {
         return ErrorResponseEntity
                 .builder()
-                .message("Invalid argument: " + ex.getMessage())
+                .message(ex.getMessage())
                 .status(HttpStatus.BAD_REQUEST)
+                .build();
+    }
+
+    @ExceptionHandler(ErrorResponseException.class)
+    public ErrorResponseEntity handleErrorResponseException(final ErrorResponseException ex) {
+        return ErrorResponseEntity
+                .builder()
+                .message(ex.getBody().getDetail())
+                .status(HttpStatus.valueOf(ex.getStatusCode().value()))
                 .build();
     }
 
@@ -129,6 +140,16 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(PasswordResetException.class)
     public ErrorResponseEntity handlePasswordResetException(final PasswordResetException ex) {
         return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ErrorResponseEntity handleRoomNotFoundException(final RoomNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ContractNotFoundException.class)
+    public ErrorResponseEntity handleContractNotFoundException(final ContractNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RuntimeException.class)

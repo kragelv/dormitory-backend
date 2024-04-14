@@ -1,6 +1,7 @@
 package by.bsuir.dorm.config;
 
 import by.bsuir.dorm.dao.RoleRepository;
+import by.bsuir.dorm.dao.RoomRepository;
 import by.bsuir.dorm.dao.UserTypeRepository;
 import by.bsuir.dorm.mapper.RoleMapper;
 import by.bsuir.dorm.mapper.UserTypeMapper;
@@ -16,8 +17,10 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,6 +29,8 @@ public class DbDataConfig {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final UserTypeMapper userTypeMapper;
+    private final RoomRepository roomRepository;
+
     @EventListener
     @Transactional
     public void seedData(ContextRefreshedEvent event) {
@@ -36,6 +41,15 @@ public class DbDataConfig {
         seedRoles(employeeRoleNames);
         userTypeRepository.findBySimpleNaturalId(employeeEmpty.getTypename()).ifPresent(employee ->
                 seedAssociationRoleUserType(employee, employeeRoleNames));
+        int[] capacities = {4, 5, 6};
+        roomRepository.saveAll(Stream.iterate(100, i -> i + 1)
+                .limit(20)
+                .map(i -> {
+                    Room r = new Room();
+                    r.setNumber(i);
+                    r.setCapacity(capacities[i % capacities.length]);
+                    return r;
+                }).collect(Collectors.toList()));
     }
 
     private List<String> prefixRoles(List<String> roles) {
@@ -51,6 +65,7 @@ public class DbDataConfig {
                         .stream()
                         .map(User::getTypename)
                         .distinct()
+                        //remain elements that don't yet exist
                         .filter(typename -> userTypeRepository.findBySimpleNaturalId(typename).isEmpty())
                         .map(userTypeMapper::toEntity)
                         .collect(Collectors.toSet())
@@ -61,6 +76,8 @@ public class DbDataConfig {
         roleRepository.saveAll(
                 roleNames
                         .stream()
+                        .distinct()
+                        //remain elements that don't yet exist
                         .filter(roleName -> roleRepository.findBySimpleNaturalId(roleName).isEmpty())
                         .map(roleMapper::toEntity)
                         .collect(Collectors.toSet())
@@ -71,24 +88,10 @@ public class DbDataConfig {
         Set<Role> associationRoles = roleNames
                 .stream()
                 .map(roleRepository::getReferenceBySimpleNaturalId)
+                .map(Optional::orElseThrow)
                 .collect(Collectors.toSet());
         for (Role associationRole : associationRoles) {
             userType.addRole(associationRole);
         }
-    }
-
-
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy(
-                "ROLE_ADMIN > ROLE_DIRECTOR\n" +
-                "ROLE_ADMIN > ROLE_HEAD\n" +
-                "ROLE_ADMIN > ROLE_CARETAKER\n" +
-                "ROLE_DIRECTOR > TYPE_EMPLOYEE\n" +
-                "ROLE_HEAD > TYPE_EMPLOYEE\n" +
-                "ROLE_CARETAKER > TYPE_EMPLOYEE\n" +
-                "ROLE_NIGHT_DUTY > TYPE_EMPLOYEE\n");
-        return hierarchy;
     }
 }

@@ -4,6 +4,7 @@ import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class StudentController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UUID> registerStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
         final UUID id = studentService.register(dto);
         return ResponseEntity.created(
