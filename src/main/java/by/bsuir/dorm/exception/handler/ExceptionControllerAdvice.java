@@ -157,7 +157,7 @@ public class ExceptionControllerAdvice {
         log.error(ex.getMessage(), ex);
         return ErrorResponseEntity
                 .builder(ex)
-                .message(ex.getClass().getCanonicalName() + ": " + ex.getMessage())
+                .message("[" + ProcessHandle.current().pid() + "] " + ex.getClass().getCanonicalName() + ": " + ex.getMessage())
                 .build();
     }
 }

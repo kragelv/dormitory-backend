@@ -1,4 +1,7 @@
 spring:
+  web:
+    locale: en_US
+    locale-resolver: fixed
   application:
     name: dorm
   datasource:
