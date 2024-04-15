@@ -30,6 +30,14 @@ server:
   error:
     include-stacktrace: never
 app:
+  web:
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+      allowed-methods: ${CORS_ALLOW_METHODS:}
+      allowed-headers: ${CORS_ALLOWED_HEADERS:}
+      exposed-headers: ${CORS_EXPOSED_HEADERS:}
+      allow-credentials: ${CORS_ALLOW_CREDENTIALS:}
+      max-age: ${CORS_MAX_AGE:}
   security:
     access-token:
       lifetime: ${ACCESS_TOKEN_LIFETIME}

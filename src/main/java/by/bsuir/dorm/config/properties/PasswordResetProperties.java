@@ -1,29 +1,18 @@
 package by.bsuir.dorm.config.properties;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.convert.DurationUnit;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
-@Slf4j
+@Getter
+@Setter
 public class PasswordResetProperties {
     private String resetUrl;
+
+    @DurationUnit(ChronoUnit.SECONDS)
     private Duration lifetime;
-
-    public String getResetUrl() {
-        return resetUrl;
-    }
-
-    public void setResetUrl(String resetUrl) {
-        this.resetUrl = resetUrl;
-        log.info("Password reset url set: " + this.resetUrl);
-    }
-
-    public Duration getLifetime() {
-        return lifetime;
-    }
-
-    public void setLifetime(Long lifetime) {
-        this.lifetime = Duration.ofSeconds(lifetime);
-        log.info("Password token lifetime set: " + this.lifetime);
-    }
 }

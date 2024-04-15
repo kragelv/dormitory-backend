@@ -19,4 +19,7 @@ public class AppProperties {
 
     @NestedConfigurationProperty
     private PasswordResetProperties passwordReset;
+
+    @NestedConfigurationProperty
+    private WebProperties web;
 }

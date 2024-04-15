@@ -13,6 +13,12 @@ spring:
   liquibase:
     enabled: false
 app:
+  web:
+    cors:
+      allowed-origins: http://localhost:3000
+      allowed-methods: GET,POST,PUT,DELETE,OPTIONS,HEAD
+      allow-credentials: true
+      max-age: 3600
   security:
     access-token:
       b64-secret: YWNjZXNzLXNlY3JldC1kZXY=

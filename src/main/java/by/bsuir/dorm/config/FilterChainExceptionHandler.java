@@ -15,8 +15,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class FilterChainExceptionHandler extends OncePerRequestFilter {
-
     private final HandlerExceptionResolver handlerExceptionResolver;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
