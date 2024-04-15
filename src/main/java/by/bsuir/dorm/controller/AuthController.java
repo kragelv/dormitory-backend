@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @PreAuthorize("isAnonymous()")
-    @GetMapping("/login")
+    @PostMapping("/login")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public AccessResponseDto login(@Valid @RequestBody LoginUserRequestDto dto,
