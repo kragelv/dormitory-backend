@@ -32,7 +32,7 @@ public interface ContractMapper {
     @Mapping(target = ".", source = "fullName")
     @Mapping(target = "passportNumber", source = "passport.number")
     @Mapping(target = "passportSeries", source = "passport.series")
-    @Mapping(target = "passportIssuePlace", source = "passport.series")
+    @Mapping(target = "passportIssuePlace", source = "passport.issuePlace")
     @Mapping(target = "passportIssueDate", source = "passport.issueDate")
     ContractDto toDto(Contract contract);
 }
