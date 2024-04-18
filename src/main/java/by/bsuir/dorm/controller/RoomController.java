@@ -21,7 +21,7 @@ public class RoomController {
     @PreAuthorize("hasAnyAuthority('TYPE_EMPLOYEE')")
     @GetMapping
     @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public PageResponse<RoomDto> getAll(@Valid @Positive @RequestParam(name = "page", defaultValue = "1")  int page,
                                         @Valid @Positive @RequestParam(name = "limit", defaultValue = "15") int limit) {
         return roomService.getAll(page - 1, limit);
