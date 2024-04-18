@@ -60,11 +60,11 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ErrorResponseEntity handleAccessDeniedException(final AccessDeniedException ex) {
-        return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);
+        return ErrorResponseEntity.create(ex, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(LoginException.class)
-    public ErrorResponseEntity handleAuthException(final LoginException ex) {
+    public ErrorResponseEntity handleLoginException(final LoginException ex) {
         final Throwable cause = ex.getCause();
         final String message;
         if (cause != null) {
