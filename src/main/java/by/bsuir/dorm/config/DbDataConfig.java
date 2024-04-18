@@ -8,12 +8,9 @@ import by.bsuir.dorm.mapper.UserTypeMapper;
 import by.bsuir.dorm.model.entity.*;
 import by.bsuir.dorm.util.RoleUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

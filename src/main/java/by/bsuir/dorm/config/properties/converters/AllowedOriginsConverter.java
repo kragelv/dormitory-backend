@@ -1,6 +1,5 @@
 package by.bsuir.dorm.config.properties.converters;
 
-import by.bsuir.dorm.config.properties.AllowedHeaders;
 import by.bsuir.dorm.config.properties.AllowedOrigins;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;

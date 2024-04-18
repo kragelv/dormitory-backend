@@ -3,6 +3,7 @@ package by.bsuir.dorm.config;
 import by.bsuir.dorm.exception.InvalidTokenException;
 import by.bsuir.dorm.service.jwt.AccessJwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,10 +51,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         final String jwt = authHeader.substring(BEARER_PREFIX.length());
-        final Claims claims = accessJwtService.validateToken(
-                jwt,
-                accessJwtService.getValidationParametersJwtAuthenticationFilter()
-        ).claims();
+        final Claims claims;
+        try {
+            claims = accessJwtService.validateToken(
+                    jwt,
+                    accessJwtService.getValidationParametersJwtAuthenticationFilter()
+            ).claims();
+        } catch (JwtException ex) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         final String id = claims.getSubject();
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(id);

@@ -1,6 +1,7 @@
 package by.bsuir.dorm.config.properties;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
