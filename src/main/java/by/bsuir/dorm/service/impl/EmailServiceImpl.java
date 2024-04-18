@@ -7,13 +7,11 @@ import by.bsuir.dorm.dto.request.EmailConfirmationRequestDto;
 import by.bsuir.dorm.dto.request.EmailSendRequestDto;
 import by.bsuir.dorm.exception.EmailConfirmationException;
 import by.bsuir.dorm.exception.EmailNotAvailableException;
-import by.bsuir.dorm.exception.UserNotFoundException;
 import by.bsuir.dorm.model.TokenPurpose;
 import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.model.entity.UserToken;
 import by.bsuir.dorm.service.EmailService;
 import by.bsuir.dorm.service.UserSecurityService;
-import by.bsuir.dorm.service.UserService;
 import by.bsuir.dorm.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +25,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -129,7 +125,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public Boolean isAvailable(EmailSendRequestDto dto) {
-        return !userRepository.existsByEmailIgnoreCase(dto.email());
+    public Boolean isAvailable(String email) {
+        return !userRepository.existsByEmailIgnoreCase(email);
     }
 }

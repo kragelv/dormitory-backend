@@ -3,8 +3,6 @@ package by.bsuir.dorm.service;
 import by.bsuir.dorm.dto.request.EmailConfirmationRequestDto;
 import by.bsuir.dorm.dto.request.EmailSendRequestDto;
 
-import java.util.UUID;
-
 
 public interface EmailService {
 
@@ -12,5 +10,5 @@ public interface EmailService {
 
     void confirmEmail(String username, EmailConfirmationRequestDto dto);
 
-    Boolean isAvailable(EmailSendRequestDto dto);
+    Boolean isAvailable(String email);
 }
