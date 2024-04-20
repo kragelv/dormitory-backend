@@ -1,5 +1,6 @@
 package by.bsuir.dorm.mapper;
 
+import by.bsuir.dorm.dto.UserInAccessDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalEmployeeDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalStudentDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalUserDto;
@@ -29,4 +30,6 @@ public interface UserMapper {
     @SubclassMapping(source = Student.class, target = PublicStudentDto.class)
     @SubclassMapping(source = Employee.class, target = PublicEmployeeDto.class)
     PublicUserDto toPublicDto(User user);
+
+    UserInAccessDto toUserInAccessDto(User user);
 }

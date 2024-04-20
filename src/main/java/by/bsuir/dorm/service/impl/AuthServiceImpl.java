@@ -9,6 +9,7 @@ import by.bsuir.dorm.exception.CookieNotFoundException;
 import by.bsuir.dorm.exception.InvalidTokenException;
 import by.bsuir.dorm.exception.LoginException;
 import by.bsuir.dorm.exception.UserNotFoundException;
+import by.bsuir.dorm.mapper.UserMapper;
 import by.bsuir.dorm.model.entity.RefreshToken;
 import by.bsuir.dorm.model.entity.RefreshTokenKey;
 import by.bsuir.dorm.model.entity.User;
@@ -56,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
     private final AccessJwtService accessJwtService;
     private final RefreshJwtService refreshJwtService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserMapper userMapper;
 
     @Override
     public AccessResponseDto login(LoginUserRequestDto dto,
@@ -72,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         } catch (AuthenticationException ex) {
-           throw new LoginException("Authentication failed", ex);
+            throw new LoginException("Authentication failed", ex);
         }
         final String accessToken = accessJwtService.createToken(accessJwtService.getClaims(user));
         final UUID sessionId = UUID.randomUUID();
@@ -88,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
         cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } logged in");
-        return new AccessResponseDto(accessToken);
+        return new AccessResponseDto(accessToken, userMapper.toUserInAccessDto(user));
     }
 
     @Override
@@ -135,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidTokenException("The refresh token can't be applied to the provided access token" +
                     " because tokens' payload is inconsistent");
         final User user = userRepository.findById(refreshUserId)
-                .orElseThrow(() -> new InvalidTokenException("Tokens' subject not found"));
+                .orElseThrow(() -> new InvalidTokenException("Tokens' subject is not found"));
         final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(user, sessionId);
         try {
             refreshJwtService.validateToken(
@@ -160,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
         cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } refreshed");
-        return new AccessResponseDto(newAccessToken);
+        return new AccessResponseDto(newAccessToken, userMapper.toUserInAccessDto(user));
     }
 
     @Override
@@ -201,6 +203,7 @@ public class AuthServiceImpl implements AuthService {
                     final User refUser = userRepository.getReferenceById(refreshUserId);
                     final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(refUser, sessionId);
                     refreshTokenRepository.deleteById(refreshTokenKey);
+                    log.info("User { id = " + refreshUserId + ", sessionId = " + sessionId + " } logged out");
                 });
     }
 

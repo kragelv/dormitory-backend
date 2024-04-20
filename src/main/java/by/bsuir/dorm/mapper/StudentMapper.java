@@ -6,6 +6,8 @@ import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.model.entity.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ValueMapping;
 
 @Mapper(
         componentModel = "spring",
@@ -15,7 +17,8 @@ public interface StudentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "passwordNeedReset", ignore = true)
-    @Mapping(target = "email", constant = "null")
+    @Mapping(target = "group", ignore = true)
+    @ValueMapping(target = "email", source = MappingConstants.NULL)
     @Mapping(target = "emailConfirmed", constant = "false")
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleNameToRoleRef")
     @Mapping(target = "fullName.surname", source = "surname")

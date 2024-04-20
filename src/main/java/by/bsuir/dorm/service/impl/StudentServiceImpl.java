@@ -24,6 +24,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public UUID register(RegisterStudentRequestDto dto){
+
         final Student student = studentMapper.toEntity(dto);
         student.setPasswordNeedReset(true);
         student.setPassword(passwordEncoder.encode(dto.cardId()));

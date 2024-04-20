@@ -23,7 +23,7 @@ app:
   security:
     access-token:
       b64-secret: YWNjZXNzLXNlY3JldC1kZXY=
-      lifetime: 15 #2 minutes
+      lifetime: 120 #2 minutes
     refresh-token:
       b64-secret: cmVmcmVzaC1zZWNyZXQtZGV2
       lifetime: 604800 #7 days
