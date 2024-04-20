@@ -48,7 +48,7 @@ public class Contract {
     @Column(name = "card_id", length = 64)
     private String cardId;
 
-    @Column(name = "number", nullable = false, unique = true, updatable = false)
+    @Column(name = "number", nullable = false, updatable = false)
     private Integer number;
 
     @Column(name = "date", nullable = false, updatable = false)
@@ -74,12 +74,6 @@ public class Contract {
     private FullName fullName;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "series", column = @Column(name = "passport_series", nullable = false, length = 2)),
-            @AttributeOverride(name = "number", column = @Column(name = "passport_number", nullable = false, length = 7)),
-            @AttributeOverride(name = "issueDate", column = @Column(name = "passport_issue_date", nullable = false)),
-            @AttributeOverride(name = "issuePlace", column = @Column(name = "passport_issue_place", nullable = false))
-    })
     private Passport passport;
 
     @Column(name = "residential_address", nullable = false, length = 255)

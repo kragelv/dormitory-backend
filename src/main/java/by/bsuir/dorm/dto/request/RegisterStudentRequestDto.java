@@ -7,8 +7,12 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public record RegisterStudentRequestDto(
+        @NotBlank
+        UUID contractId,
+
         @Prefixed(
                 value = RoleUtil.ROLE_PREFIX,
                 message = "Role must be prefixed with " + RoleUtil.ROLE_PREFIX
@@ -31,10 +35,6 @@ public record RegisterStudentRequestDto(
         @Size(max = 40)
         String patronymic,
 
-        @NotNull
-        @Past
-        LocalDate birthdate,
-
         @NotBlankIfPresent
         @Size(max = 40)
         String surnameBy,
@@ -46,6 +46,27 @@ public record RegisterStudentRequestDto(
         @NotBlankIfPresent
         @Size(max = 40)
         String patronymicBy,
+
+        @NotNull
+        @Past
+        LocalDate birthdate,
+
+        @NotBlank
+        @Size(max = 255)
+        String birthplace,
+
+        @NotBlank
+        @Size(max = 255)
+        String residentialAddress,
+
+        @NotBlank
+        @Size(max = 16)
+        String phoneNumber,
+
+        @NotBlank
+        @Size(max = 6)
+        @Pattern(regexp = "[а-яА-Яa-zA-Z0-9]*", message = "Number contains invalid character")
+        String groupNumber,
 
         @NotNull
         @Min(1900)

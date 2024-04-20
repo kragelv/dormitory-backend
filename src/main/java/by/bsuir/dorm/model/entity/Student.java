@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name = "tbl_student")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Student extends User {
-
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "surname", column = @Column(name = "surname_by", length = 40)),
@@ -26,7 +25,12 @@ public class Student extends User {
     })
     private FullName fullNameBy;
 
-//TODO: all addresses
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
+
+    @Column(name = "residential_address", nullable = false, length = 255)
+    private String residentialAddress;
 
     @Column(name = "graduation_year", nullable = false)
     private Integer graduationYear;
@@ -55,11 +59,17 @@ public class Student extends User {
     )
     private List<Contract> contracts = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "mother_id")
+    private Mother mother;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "father_id")
+    private Father father;
+
     @Override
     @Transient
     public String getTypename() {
         return "TYPE_STUDENT";
     }
-
-    //TODO: parents
 }

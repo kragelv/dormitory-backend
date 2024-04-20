@@ -2,7 +2,10 @@ package by.bsuir.dorm.model.entity;
 
 import by.bsuir.dorm.model.listener.UserListener;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +35,9 @@ public abstract class User implements UserDetails {
     @Column(name = "card_id", nullable = false, unique = true, length = 64)
     private String cardId;
 
+    @Embedded
+    private Phone phone;
+
     @Column(name = "password", nullable = false, length = 60)
     private String password;
 
@@ -54,8 +60,6 @@ public abstract class User implements UserDetails {
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    private Phone phone;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "m2m_user_roles",

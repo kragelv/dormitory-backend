@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+
 @Component
 @RequiredArgsConstructor
 public class ExtensionsMapper {
@@ -17,5 +19,12 @@ public class ExtensionsMapper {
         final Role roleRef = roleRepository.getReferenceBySimpleNaturalId(name)
                 .orElseThrow(() -> new RoleNotFoundException("Role { name = '" + name + "' } doesn't exist"));
         return roleRef;
+    }
+
+    @Named("collectionToSize")
+    public int collectionToSize(Collection<?> collection) {
+        if (collection == null)
+            return 0;
+        return collection.size();
     }
 }

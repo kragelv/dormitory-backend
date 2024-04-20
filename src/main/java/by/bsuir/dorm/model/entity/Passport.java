@@ -16,15 +16,15 @@ import java.time.LocalDate;
 @Setter
 @Embeddable
 public class Passport implements Serializable {
-    @Column(name = "series", nullable = false, length = 2)
+    @Column(name = "passport_series", nullable = false, length = 2)
     private String series;
 
-    @Column(name = "number", nullable = false, length = 7)
+    @Column(name = "passport_number", nullable = false, length = 7)
     private String number;
 
-    @Column(name = "issue_date", nullable = false)
+    @Column(name = "passport_issue_date", nullable = false)
     private LocalDate issueDate;
 
-    @Column(name = "issue_place", nullable = false)
+    @Column(name = "passport_issue_place", nullable = false)
     private String issuePlace;
 }
