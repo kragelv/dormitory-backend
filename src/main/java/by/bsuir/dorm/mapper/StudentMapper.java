@@ -1,8 +1,8 @@
 package by.bsuir.dorm.mapper;
 
+import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalStudentDto;
 import by.bsuir.dorm.dto.userpublic.PublicStudentDto;
-import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.model.entity.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

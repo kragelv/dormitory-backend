@@ -2,7 +2,6 @@ package by.bsuir.dorm.service.jwt;
 
 import by.bsuir.dorm.model.entity.User;
 import io.jsonwebtoken.Claims;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AccessJwtService extends JwtService {
     String ACCESS_AUTHORITIES = "ath";

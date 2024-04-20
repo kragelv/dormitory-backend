@@ -1,9 +1,8 @@
 package by.bsuir.dorm.controller;
 
 import by.bsuir.dorm.dto.ContractDto;
-import by.bsuir.dorm.dto.RoomDto;
-import by.bsuir.dorm.dto.response.PageResponse;
 import by.bsuir.dorm.dto.request.ContractCreateRequestDto;
+import by.bsuir.dorm.dto.response.PageResponse;
 import by.bsuir.dorm.service.ContractService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;

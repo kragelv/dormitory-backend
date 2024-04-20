@@ -1,7 +1,6 @@
 package by.bsuir.dorm.service;
 
 import by.bsuir.dorm.dto.GroupDto;
-import by.bsuir.dorm.dto.RoomDto;
 import by.bsuir.dorm.dto.request.GroupRequestDto;
 import by.bsuir.dorm.dto.response.PageResponse;
 

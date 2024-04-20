@@ -6,9 +6,6 @@ import by.bsuir.dorm.model.entity.Contract;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.Collection;
-import java.util.List;
-
 @Mapper(
         componentModel = "spring",
         uses = {

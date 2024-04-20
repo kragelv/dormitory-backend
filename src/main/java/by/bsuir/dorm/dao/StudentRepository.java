@@ -1,7 +1,6 @@
 package by.bsuir.dorm.dao;
 
 import by.bsuir.dorm.model.entity.Student;
-import by.bsuir.dorm.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
