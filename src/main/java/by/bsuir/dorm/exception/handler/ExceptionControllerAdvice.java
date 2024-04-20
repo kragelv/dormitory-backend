@@ -12,7 +12,6 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -150,6 +149,11 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(ContractNotFoundException.class)
     public ErrorResponseEntity handleContractNotFoundException(final ContractNotFoundException ex) {
         return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmailNotPresentException.class)
+    public ErrorResponseEntity handleEmailNotPresentException(final EmailNotPresentException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)

@@ -7,6 +7,7 @@ import by.bsuir.dorm.dto.request.EmailConfirmationRequestDto;
 import by.bsuir.dorm.dto.request.EmailSendRequestDto;
 import by.bsuir.dorm.exception.EmailConfirmationException;
 import by.bsuir.dorm.exception.EmailNotAvailableException;
+import by.bsuir.dorm.exception.EmailNotPresentException;
 import by.bsuir.dorm.model.TokenPurpose;
 import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.model.entity.UserToken;
@@ -49,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendConfirmation(String username, EmailSendRequestDto dto) {
+    public String sendConfirmation(String username, EmailSendRequestDto dto) {
         final String email = dto.email();
         if (userRepository.existsByEmailIgnoreCase(email))
             throw new EmailNotAvailableException("Email '" + email + "' is not available");
@@ -72,6 +73,41 @@ public class EmailServiceImpl implements EmailService {
         user.setEmailConfirmed(false);
         log.info("Send confirmation email for User { id = " + user.getId() +
                 ", e-mail = " + user.getEmail() +" } : "  + tokenValue);
+        SimpleMailMessage mailMessage = getMailMessage(email, tokenValue, user);
+        CompletableFuture.runAsync(() -> mailSender.send(mailMessage));
+        userRepository.save(user);
+        return email;
+    }
+
+    @Override
+    public String resendConfirmation(String username) {
+        User user = userSecurityService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
+        final String email = user.getEmail();
+        if (email == null) {
+            throw new EmailNotPresentException("User { id = " + id  +" } doesn't have email. Use send before it");
+        }
+        final SecureRandom random = RandomUtil.getSecureRandom();
+        byte[] tokenRandomStamp = new byte[TOKEN_STAMP_BYTES_LENGTH];
+        random.nextBytes(tokenRandomStamp);
+        final UserToken userToken = compactUserToken(user, tokenRandomStamp);
+        userTokenRepository.save(userToken);
+        byte[] tokenBytes = new byte[TOKEN_STAMP_BYTES_LENGTH + UUID_BYTES_LENGTH];
+        final UUID tokenId = userToken.getId();
+        ByteBuffer.wrap(tokenBytes)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putLong(tokenId.getLeastSignificantBits())
+                .putLong(tokenId.getMostSignificantBits())
+                .put(tokenRandomStamp);
+        final String tokenValue = Base64.getUrlEncoder().encodeToString(tokenBytes);
+        log.info("Resend confirmation email for User { id = " + user.getId() +
+                ", e-mail = " + user.getEmail() +" } : "  + tokenValue);
+        SimpleMailMessage mailMessage = getMailMessage(email, tokenValue, user);
+        CompletableFuture.runAsync(() -> mailSender.send(mailMessage));
+        return email;
+    }
+
+    private SimpleMailMessage getMailMessage(String email, String tokenValue, User user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
         mailMessage.setSubject("Confirm E-mail");
@@ -82,8 +118,7 @@ public class EmailServiceImpl implements EmailService {
         mailMessage.setText("Hello, " + user.getFullName().getName() + " "
                 + user.getFullName().getSurname() +
                 ".\r\n\r\nPlease confirm your email address by clicking the following link: " + confirmUri);
-        CompletableFuture.runAsync(() -> mailSender.send(mailMessage));
-        userRepository.save(user);
+        return mailMessage;
     }
 
     private UserToken compactUserToken(User user, byte[] tokenStamp) {
@@ -99,16 +134,21 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void confirmEmail(String username, EmailConfirmationRequestDto dto) {
-        byte[] tokenBytes = Base64.getUrlDecoder().decode(dto.token());
+        byte[] tokenBytes;
+        try {
+            tokenBytes = Base64.getUrlDecoder().decode(dto.token());
+        } catch (IllegalArgumentException ex) {
+            throw new EmailConfirmationException("Bad confirmation token. Try confirmation again", ex);
+        }
         final ByteBuffer bb = ByteBuffer.wrap(tokenBytes)
                 .order(ByteOrder.LITTLE_ENDIAN);
         long low = bb.getLong();
         long high = bb.getLong();
         final UUID tokenId = new UUID(high, low);
-        User user = userSecurityService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
-        UserToken userToken = userTokenRepository.findByPurposeAndId(TokenPurpose.EMAIL, tokenId)
+        final UserToken userToken = userTokenRepository.findByPurposeAndId(TokenPurpose.EMAIL, tokenId)
                 .orElseThrow(() -> new EmailConfirmationException("Bad confirmation token. Try confirmation again"));
+        final User user = userSecurityService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
         if (Instant.now().isAfter(userToken.getExpirationTime())) {
             userTokenRepository.deleteById(tokenId);
             throw new EmailConfirmationException("Confirmation token expired. Try confirmation again");

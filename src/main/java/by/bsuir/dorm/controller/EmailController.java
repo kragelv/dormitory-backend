@@ -28,10 +28,19 @@ public class EmailController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/send")
     @ResponseBody
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sendConfirmation(@Valid @RequestBody EmailSendRequestDto dto){
+    @ResponseStatus(HttpStatus.OK)
+    public String sendConfirmation(@Valid @RequestBody EmailSendRequestDto dto){
         final String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        emailService.sendConfirmation(username, dto);
+        return emailService.sendConfirmation(username, dto);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/resend")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public String sendConfirmation(){
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return emailService.resendConfirmation(username);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -40,7 +49,6 @@ public class EmailController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmEmail(@Valid @RequestBody EmailConfirmationRequestDto dto) {
         final String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
         emailService.confirmEmail(username, dto);
     }
 }

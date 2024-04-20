@@ -6,7 +6,9 @@ import by.bsuir.dorm.dto.request.EmailSendRequestDto;
 
 public interface EmailService {
 
-    void sendConfirmation(String username, EmailSendRequestDto dto);
+    String sendConfirmation(String username, EmailSendRequestDto dto);
+
+    String resendConfirmation(String username);
 
     void confirmEmail(String username, EmailConfirmationRequestDto dto);
 
