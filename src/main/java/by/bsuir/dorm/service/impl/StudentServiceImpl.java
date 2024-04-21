@@ -23,14 +23,13 @@ public class StudentServiceImpl implements StudentService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UUID register(RegisterStudentRequestDto dto){
-
+    public UUID register(RegisterStudentRequestDto dto) {
         final Student student = studentMapper.toEntity(dto);
         student.setPasswordNeedReset(true);
         student.setPassword(passwordEncoder.encode(dto.cardId()));
         final Student saved = userRepository.save(student);
         log.info("Register new Student: { id = " + saved.getId() +
-                "; cardId = " + saved.getCardId() + "; fullName = " + saved.getFullName());
+                ", cardId = " + saved.getCardId() + "; fullName = " + saved.getFullName());
         return saved.getId();
     }
 }

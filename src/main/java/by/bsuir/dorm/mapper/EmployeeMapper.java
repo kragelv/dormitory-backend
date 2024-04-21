@@ -23,10 +23,8 @@ public interface EmployeeMapper {
     @Mapping(target = "fullName.surname", source = "surname")
     @Mapping(target = "fullName.name", source = "name")
     @Mapping(target = "fullName.patronymic", source = "patronymic")
-    @Mapping(target = "phone.number", source = "phoneNumber")
     Employee toEntity(RegisterEmployeeRequestDto dto);
 
-    @Mapping(target = "phoneNumber", source = "phone.number")
     PersonalEmployeeDto toPersonalDto(Employee employee);
 
     PublicEmployeeDto toPublicDto(Employee employee);

@@ -27,4 +27,7 @@ public class Passport implements Serializable {
 
     @Column(name = "passport_issue_place", nullable = false)
     private String issuePlace;
+
+    @Column(name = "passport_id",  nullable = false, length = 14)
+    private String passportId;
 }

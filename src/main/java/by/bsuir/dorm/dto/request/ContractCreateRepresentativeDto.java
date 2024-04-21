@@ -5,11 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public record ContractCreateRequestDto(
-        @NotBlankIfPresent
-        @Size(max = 64)
-        String cardId,
-
+public record ContractCreateRepresentativeDto(
         @NotBlank
         @Size(max = 40)
         String surname,
@@ -40,31 +36,6 @@ public record ContractCreateRequestDto(
 
         @NotBlank
         @Pattern(regexp = "^[0-9]{7}[A-Z][0-9]{3}[A-Z]{2}[0-9]$")
-        String passportId,
-
-        @NotBlank
-        @Size(max = 255)
-        String residentialAddress,
-
-        @NotBlank
-        @Size(max = 16)
-        String phoneNumber,
-
-        @NotNull
-        @PositiveOrZero
-        Integer roomNumber,
-
-        ContractCreateRepresentativeDto representative,
-
-        @NotNull
-        LocalDate startDate,
-
-        @NotNull
-        LocalDate expiryDate
-
+        String passportId
 ) {
-        @AssertTrue( message = "Field 'expiryDate' should be later than 'startDate'")
-        public boolean isExpiryAfterStart() {
-                return expiryDate.isAfter(startDate);
-        }
 }

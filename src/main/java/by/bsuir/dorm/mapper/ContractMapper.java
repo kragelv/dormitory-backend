@@ -10,7 +10,8 @@ import org.mapstruct.Mapping;
         componentModel = "spring",
         uses = {
                 RoomMapper.class,
-                UserMapper.class
+                UserMapper.class,
+                RepresentativeMapper.class
         }
 )
 public interface ContractMapper {
@@ -20,6 +21,7 @@ public interface ContractMapper {
     @Mapping(target = "passport.series", source = "passportSeries")
     @Mapping(target = "passport.issuePlace", source = "passportIssuePlace")
     @Mapping(target = "passport.issueDate", source = "passportIssueDate")
+    @Mapping(target = "passport.passportId", source = "passportId")
     @Mapping(target = "date", expression = "java(LocalDate.now())")
     @Mapping(target = "terminationDate", ignore = true)
     @Mapping(target = "student", ignore = true)
@@ -27,9 +29,5 @@ public interface ContractMapper {
     Contract toEntity(ContractCreateRequestDto contractCreateRequestDto);
 
     @Mapping(target = ".", source = "fullName")
-    @Mapping(target = "passportNumber", source = "passport.number")
-    @Mapping(target = "passportSeries", source = "passport.series")
-    @Mapping(target = "passportIssuePlace", source = "passport.issuePlace")
-    @Mapping(target = "passportIssueDate", source = "passport.issueDate")
     ContractDto toDto(Contract contract);
 }

@@ -35,8 +35,8 @@ public abstract class User implements UserDetails {
     @Column(name = "card_id", nullable = false, unique = true, length = 64)
     private String cardId;
 
-    @Embedded
-    private Phone phone;
+    @Column(name = "phone_number", nullable = false, length = 16)
+    private String phoneNumber;
 
     @Column(name = "password", nullable = false, length = 60)
     private String password;

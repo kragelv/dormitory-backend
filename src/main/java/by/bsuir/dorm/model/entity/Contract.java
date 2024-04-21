@@ -76,11 +76,15 @@ public class Contract {
     @Embedded
     private Passport passport;
 
+    @Column(name = "phone_number", nullable = false, length = 16)
+    private String phoneNumber;
+
     @Column(name = "residential_address", nullable = false, length = 255)
     private String residentialAddress;
 
-    @Column(name = "birthplace", nullable = false, length = 255)
-    private String birthplace;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "representative_id")
+    private Representative representative;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "created_by_id")

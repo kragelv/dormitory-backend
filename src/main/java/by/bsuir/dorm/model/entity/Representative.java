@@ -13,9 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.INTEGER)
-public abstract class Parent {
+@Table(name = "tbl_representative")
+public class Representative {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -28,12 +27,10 @@ public abstract class Parent {
     })
     private FullName fullName;
 
-    @Column(name = "phone_number", nullable = false, length = 16)
-    private String phoneNumber;
+    @Embedded
+    private Passport passport;
 
-    @Column(name = "workplace", length = 255)
-    private String workplace;
+    @OneToOne(mappedBy = "representative", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false, orphanRemoval = true)
+    private Contract contract;
 
-    @Column(name = "document_id", nullable = false, length = 14)
-    private String documentId;
 }

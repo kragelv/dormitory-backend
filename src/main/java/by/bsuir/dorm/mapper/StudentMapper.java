@@ -17,7 +17,7 @@ public interface StudentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "passwordNeedReset", ignore = true)
-    @Mapping(target = "group", ignore = true)
+    @Mapping(target = "group", source = "groupNumber", qualifiedByName = "groupNumberToGroupRef")
     @ValueMapping(target = "email", source = MappingConstants.NULL)
     @Mapping(target = "emailConfirmed", constant = "false")
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleNameToRoleRef")
