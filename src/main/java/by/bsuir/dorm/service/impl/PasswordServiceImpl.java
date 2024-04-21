@@ -47,6 +47,7 @@ public class PasswordServiceImpl implements PasswordService {
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
     private final UserTokenService userTokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public void sendToken(PasswordSendRequestDto dto) {
@@ -125,6 +126,7 @@ public class PasswordServiceImpl implements PasswordService {
         }
         userRepository.save(user);
         userTokenRepository.deleteAllByPurposeAndUser(TokenPurpose.PASSWORD, user);
+        refreshTokenRepository.deleteByRefreshTokenKeyUser(user);
         log.info("Password reset for User { id = " + user.getId() +
                 ", e-mail = " + user.getEmail() +" } with token: " + dto.token());
     }
