@@ -13,6 +13,7 @@ import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.model.entity.UserToken;
 import by.bsuir.dorm.service.EmailService;
 import by.bsuir.dorm.service.UserSecurityService;
+import by.bsuir.dorm.service.UserTokenService;
 import by.bsuir.dorm.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,7 @@ public class EmailServiceImpl implements EmailService {
     private final UserTokenRepository userTokenRepository;
     private final PasswordEncoder userTokenEncoder;
     private final JavaMailSender mailSender;
+    private final UserTokenService userTokenService;
 
     @Override
     public String sendConfirmation(String username, EmailSendRequestDto dto) {
@@ -149,8 +151,8 @@ public class EmailServiceImpl implements EmailService {
                 .orElseThrow(() -> new EmailConfirmationException("Bad confirmation token. Try confirmation again"));
         final User user = userSecurityService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User { id = " + id  +" } is not found"));
+        userTokenService.deleteToken(userToken);
         if (Instant.now().isAfter(userToken.getExpirationTime())) {
-            userTokenRepository.deleteById(tokenId);
             throw new EmailConfirmationException("Confirmation token expired. Try confirmation again");
         }
         byte[] tokenStamp = new byte[TOKEN_STAMP_BYTES_LENGTH];
@@ -162,9 +164,12 @@ public class EmailServiceImpl implements EmailService {
         user.setEmailConfirmed(true);
         userRepository.save(user);
         userTokenRepository.deleteAllByPurposeAndUser(TokenPurpose.EMAIL, user);
+        log.info("Confirm email for User { id = " + user.getId() +
+                ", e-mail = " + user.getEmail() +" } with token: " + dto.token());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean isAvailable(String email) {
         return !userRepository.existsByEmailIgnoreCase(email);
     }

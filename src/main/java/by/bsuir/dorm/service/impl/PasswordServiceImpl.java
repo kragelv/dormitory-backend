@@ -1,6 +1,7 @@
 package by.bsuir.dorm.service.impl;
 
 import by.bsuir.dorm.config.properties.AppProperties;
+import by.bsuir.dorm.dao.RefreshTokenRepository;
 import by.bsuir.dorm.dao.UserRepository;
 import by.bsuir.dorm.dao.UserTokenRepository;
 import by.bsuir.dorm.dto.request.PasswordChangeRequestDto;
@@ -11,6 +12,7 @@ import by.bsuir.dorm.model.TokenPurpose;
 import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.model.entity.UserToken;
 import by.bsuir.dorm.service.PasswordService;
+import by.bsuir.dorm.service.UserTokenService;
 import by.bsuir.dorm.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +46,10 @@ public class PasswordServiceImpl implements PasswordService {
     private final UserTokenRepository userTokenRepository;
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
+    private final UserTokenService userTokenService;
 
     @Override
     public void sendToken(PasswordSendRequestDto dto) {
-
         final String email = dto.email();
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new UserNotFoundException("Invalid email: " + email));
@@ -93,7 +95,12 @@ public class PasswordServiceImpl implements PasswordService {
 
     @Override
     public void changePassword(PasswordChangeRequestDto dto) {
-        byte[] tokenBytes = Base64.getUrlDecoder().decode(dto.token());
+        byte[] tokenBytes;
+        try {
+            tokenBytes = Base64.getUrlDecoder().decode(dto.token());
+        } catch (IllegalArgumentException ex) {
+            throw new PasswordResetException("Bad reset token. Try confirmation again", ex);
+        }
         final ByteBuffer bb = ByteBuffer.wrap(tokenBytes)
                 .order(ByteOrder.LITTLE_ENDIAN);
         long low = bb.getLong();
@@ -101,8 +108,8 @@ public class PasswordServiceImpl implements PasswordService {
         final UUID tokenId = new UUID(high, low);
         UserToken userToken = userTokenRepository.findByPurposeAndId(TokenPurpose.PASSWORD, tokenId)
                 .orElseThrow(() -> new PasswordResetException("Bad reset token. Try change password again"));
+        userTokenService.deleteToken(userToken);
         if (Instant.now().isAfter(userToken.getExpirationTime())) {
-            userTokenRepository.deleteById(tokenId);
             throw new PasswordResetException("Reset token expired. Try change password again");
         }
         byte[] tokenStamp = new byte[TOKEN_STAMP_BYTES_LENGTH];
@@ -118,5 +125,7 @@ public class PasswordServiceImpl implements PasswordService {
         }
         userRepository.save(user);
         userTokenRepository.deleteAllByPurposeAndUser(TokenPurpose.PASSWORD, user);
+        log.info("Password reset for User { id = " + user.getId() +
+                ", e-mail = " + user.getEmail() +" } with token: " + dto.token());
     }
 }
