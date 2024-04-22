@@ -25,7 +25,7 @@ public class RoleController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<RoleDto> getRoles() {
-        return roleService.getRolesByUserType();
+        return roleService.getRoles();
     }
 
     @GetMapping("/{id}")

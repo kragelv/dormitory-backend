@@ -7,7 +7,7 @@ import java.util.List;
 public interface RoleService {
     List<RoleDto> getRolesByUserType(String typename);
 
-    List<RoleDto> getRolesByUserType();
+    List<RoleDto> getRoles();
 
     RoleDto getByRoleId(Integer id);
 }

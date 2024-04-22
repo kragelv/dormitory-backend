@@ -36,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RoleDto> getRolesByUserType() {
+    public List<RoleDto> getRoles() {
         return roleMapper.toDto(roleRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
     }
 
