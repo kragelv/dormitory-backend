@@ -4,12 +4,10 @@ import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalStudentDto;
 import by.bsuir.dorm.dto.userpublic.PublicStudentDto;
 import by.bsuir.dorm.model.entity.Student;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ValueMapping;
+import org.mapstruct.*;
 
 @Mapper(
+
         componentModel = "spring",
         uses = {RoleMapper.class, ExtensionsMapper.class}
 )
@@ -17,7 +15,7 @@ public interface StudentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "passwordNeedReset", ignore = true)
-    @Mapping(target = "group", source = "groupNumber", qualifiedByName = "groupNumberToGroupRef")
+    @Mapping(target = "group", source = "group", qualifiedByName = "groupNumberToGroupRef")
     @ValueMapping(target = "email", source = MappingConstants.NULL)
     @Mapping(target = "emailConfirmed", constant = "false")
     @Mapping(target = "roles", source = "roles", qualifiedByName = "roleNameToRoleRef")
@@ -27,9 +25,23 @@ public interface StudentMapper {
     @Mapping(target = "fullNameBy.surname", source = "surnameBy")
     @Mapping(target = "fullNameBy.name", source = "nameBy")
     @Mapping(target = "fullNameBy.patronymic", source = "patronymicBy")
+    @Mapping(target = "mother.fullName.name", source = "mother.name")
+    @Mapping(target = "mother.fullName.surname", source = "mother.surname")
+    @Mapping(target = "mother.fullName.patronymic", source = "mother.patronymic")
+    @Mapping(target = "father.fullName.name", source = "father.name")
+    @Mapping(target = "father.fullName.surname", source = "father.surname")
+    @Mapping(target = "father.fullName.patronymic", source = "father.patronymic")
     Student toEntity(RegisterStudentRequestDto dto);
 
+    @Mapping(target = "group", source = "group.number")
+    @Mapping(target = "room", source = ".", qualifiedByName = "getStudentRoom")
     PersonalStudentDto toPersonalDto(Student student);
 
+    @Mapping(target = "group", source = "group.number")
     PublicStudentDto toPublicDto(Student student);
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @InheritConfiguration(name = "toEntity")
+    Student partialUpdate(RegisterStudentRequestDto registerStudentRequestDto, @MappingTarget Student student);
 }

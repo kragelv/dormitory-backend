@@ -11,6 +11,7 @@ import by.bsuir.dorm.model.entity.Group;
 import by.bsuir.dorm.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -79,7 +80,6 @@ public class GroupServiceImpl implements GroupService {
     public void deleteByNumber(String number) {
         groupRepository.findBySimpleNaturalId(number).ifPresent(group -> {
             log.info("Delete group by number { id = " + group.getId() + ", number = " + group.getNumber() + "}");
-            groupRepository.delete(group);
         });
     }
 }

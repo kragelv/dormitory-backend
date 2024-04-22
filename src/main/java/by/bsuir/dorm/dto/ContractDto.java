@@ -3,11 +3,13 @@ package by.bsuir.dorm.dto;
 import by.bsuir.dorm.dto.userpublic.PublicStudentDto;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record ContractDto(
+        UUID id,
         Integer number,
         LocalDate date,
-        PublicStudentDto student,
+        UUID studentId,
         RoomDto room,
         String cardId,
         String surname,

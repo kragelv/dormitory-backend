@@ -1,6 +1,7 @@
 package by.bsuir.dorm.mapper;
 
 import by.bsuir.dorm.dto.ContractDto;
+import by.bsuir.dorm.dto.ContractInStudentRoomDto;
 import by.bsuir.dorm.dto.request.ContractCreateRequestDto;
 import by.bsuir.dorm.model.entity.Contract;
 import org.mapstruct.Mapper;
@@ -29,5 +30,8 @@ public interface ContractMapper {
     Contract toEntity(ContractCreateRequestDto contractCreateRequestDto);
 
     @Mapping(target = ".", source = "fullName")
+    @Mapping(target = "studentId", source = "student.id")
     ContractDto toDto(Contract contract);
+
+    ContractInStudentRoomDto toInStudentRoomDto(Contract contract);
 }

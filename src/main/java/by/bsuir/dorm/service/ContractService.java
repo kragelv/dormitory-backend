@@ -12,4 +12,7 @@ public interface ContractService {
     PageResponse<ContractDto> getAll(int page, int limit);
 
     ContractDto getById(UUID id);
+
+    void terminate(UUID id);
 }
+

@@ -156,6 +156,17 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(StudentAlreadyExistsException.class)
+    public ErrorResponseEntity handleStudentAlreadyExistsException(final StudentAlreadyExistsException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(StudentAlreadyHasContractException.class)
+    public ErrorResponseEntity handleStudentAlreadyHasContractException(
+            final StudentAlreadyHasContractException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity handleRuntimeException(final RuntimeException ex) {
         log.error(ex.getMessage(), ex);

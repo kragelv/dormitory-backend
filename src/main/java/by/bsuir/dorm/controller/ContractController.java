@@ -53,4 +53,12 @@ public class ContractController {
     public ContractDto getById(@PathVariable("id") UUID id) {
         return contractService.getById(id);
     }
+
+    @PreAuthorize("hasAnyAuthority('TYPE_EMPLOYEE')")
+    @PostMapping("/{id}/terminate")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void terminateContract(@PathVariable("id") UUID id) {
+        contractService.terminate(id);
+    }
 }

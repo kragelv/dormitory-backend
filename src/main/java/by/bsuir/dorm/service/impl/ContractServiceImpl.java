@@ -26,6 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -51,7 +52,7 @@ public class ContractServiceImpl implements ContractService {
         }
         final Integer roomNumber = dto.roomNumber();
         final Room room = roomRepository.getReferenceBySimpleNaturalId(roomNumber).
-                orElseThrow(() -> new RoomNotFoundException("Room { number = " + roomNumber +" } doesn't exist"));
+                orElseThrow(() -> new RoomNotFoundException("Room { number = " + roomNumber + " } doesn't exist"));
         final User createdBy = userSecurityService.findByUsername(creator)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid creator id = " + creator));
         final Contract contract = contractMapper.toEntity(dto);
@@ -80,7 +81,15 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public ContractDto getById(UUID id) {
         final Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Contract { id = " + id +" } doesn't exist"));
+                .orElseThrow(() -> new ContractNotFoundException("Contract { id = " + id + " } doesn't exist"));
         return contractMapper.toDto(contract);
+    }
+
+    @Override
+    public void terminate(UUID id) {
+        final Contract contract = contractRepository.findActiveContractById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Active contract { id = " + id + "} doesn't exist"));
+        contract.setTerminationDate(LocalDate.now());
+        contractRepository.save(contract);
     }
 }

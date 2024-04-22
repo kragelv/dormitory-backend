@@ -13,6 +13,7 @@ import java.util.UUID;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class PublicStudentDto extends PublicUserDto {
+    String group;
     FullNameDto fullNameBy;
     Integer graduationYear;
     Boolean isStudentUnionMember;
@@ -24,10 +25,12 @@ public class PublicStudentDto extends PublicUserDto {
                             FullNameDto fullName,
                             LocalDate birthdate,
                             String cardId,
+                            String group,
                             FullNameDto fullNameBy,
                             Integer graduationYear,
                             Boolean isStudentUnionMember) {
         super(typename, id, roles, fullName, birthdate, cardId);
+        this.group = group;
         this.fullNameBy = fullNameBy;
         this.graduationYear = graduationYear;
         this.isStudentUnionMember = isStudentUnionMember;

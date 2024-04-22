@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record RegisterStudentRequestDto(
-        @NotBlank
+        @NotNull
         UUID contractId,
 
         @Prefixed(
@@ -66,7 +66,7 @@ public record RegisterStudentRequestDto(
         @NotBlank
         @Size(max = 6)
         @Pattern(regexp = "[а-яА-Яa-zA-Z0-9]*", message = "Number contains invalid character")
-        String groupNumber,
+        String group,
 
         @NotNull
         @Min(1900)
@@ -83,6 +83,10 @@ public record RegisterStudentRequestDto(
 
         @NotNull
         Boolean isStudentUnionMember,
+
+        MotherRegisterStudentDto mother,
+
+        FatherRegisterStudentDto father,
 
         @NotBlankIfPresent(message = "Field must be not blank")
         @Size(max = 256)

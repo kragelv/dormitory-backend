@@ -18,10 +18,10 @@ import java.util.UUID;
 public class StudentController {
     private final StudentService studentService;
 
-    @PreAuthorize("isAnonymous()")
+    @PreAuthorize("hasAnyAuthority('ROLE_CARETAKER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UUID> registerStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
+    public ResponseEntity<UUID> registerNewStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
         final UUID id = studentService.register(dto);
         return ResponseEntity.created(
                         ServletUriComponentsBuilder
@@ -32,10 +32,10 @@ public class StudentController {
                 .body(id);
     }
 
-    @PreAuthorize("isAnonymous()")
-    @PutMapping
-    public ResponseEntity<UUID> updateStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
-        final UUID id = studentService.register(dto);
+    @PreAuthorize("hasAnyAuthority('ROLE_CARETAKER')")
+    @PutMapping("/")
+    public ResponseEntity<UUID> updateExistingStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
+        final UUID id = studentService.update(dto);
         return ResponseEntity.ok()
                 .location(ServletUriComponentsBuilder
                         .fromPath("/api/v1/users/{id}")
