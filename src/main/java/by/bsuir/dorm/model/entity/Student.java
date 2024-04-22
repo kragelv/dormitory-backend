@@ -56,7 +56,18 @@ public class Student extends User {
             mappedBy = "student",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
+    @Setter(AccessLevel.NONE)
     private List<Contract> contracts = new ArrayList<>();
+
+    private void addContract(Contract contract) {
+        contracts.add(contract);
+        contract.setStudent(this);
+    }
+
+    private void removeContract(Contract contract) {
+        contracts.remove(contract);
+        contract.setStudent(null);
+    }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "mother_id")

@@ -12,6 +12,7 @@ import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -58,5 +59,11 @@ public class ExtensionsMapper {
     public Integer getStudentRoomNumber(Student student) {
         final Optional<Contract> activeContract = contractRepository.findByStudentAndActive(student);
         return activeContract.map(Contract::getRoom).map(Room::getNumber).orElse(null);
+    }
+
+    @Named("getCurrentNumber")
+    public Integer getCurrentNumber(Room room) {
+        final List<Contract> activeContracts = contractRepository.findAllActiveByRoom(room);
+        return activeContracts.size();
     }
 }

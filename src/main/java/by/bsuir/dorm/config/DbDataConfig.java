@@ -38,15 +38,6 @@ public class DbDataConfig {
         seedRoles(employeeRoleNames);
         userTypeRepository.findBySimpleNaturalId(employeeEmpty.getTypename()).ifPresent(employee ->
                 seedAssociationRoleUserType(employee, employeeRoleNames));
-        int[] capacities = {4, 5, 6};
-        roomRepository.saveAll(Stream.iterate(100, i -> i + 1)
-                .limit(20)
-                .map(i -> {
-                    Room r = new Room();
-                    r.setNumber(i);
-                    r.setCapacity(capacities[i % capacities.length]);
-                    return r;
-                }).collect(Collectors.toList()));
     }
 
     private List<String> prefixRoles(List<String> roles) {

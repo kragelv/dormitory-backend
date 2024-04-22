@@ -87,6 +87,7 @@ public class ContractServiceImpl implements ContractService {
     public ContractDto getById(UUID id) {
         final Contract contract = contractRepository.findById(id)
                 .orElseThrow(() -> new ContractNotFoundException("Contract { id = " + id + " } doesn't exist"));
+        log.info("Get contract by id: " + id);
         return contractMapper.toDto(contract);
     }
 

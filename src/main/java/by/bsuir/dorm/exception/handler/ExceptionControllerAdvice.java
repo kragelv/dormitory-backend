@@ -141,6 +141,16 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RoomAlreadyExistsException.class)
+    public ErrorResponseEntity handleRoomAlreadyExistsException(final RoomAlreadyExistsException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RoomStateException.class)
+    public ErrorResponseEntity handleRoomStateException(final RoomStateException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(ContractNotFoundException.class)
     public ErrorResponseEntity handleContractNotFoundException(final ContractNotFoundException ex) {
         return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);

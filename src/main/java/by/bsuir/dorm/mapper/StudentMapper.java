@@ -1,11 +1,14 @@
 package by.bsuir.dorm.mapper;
 
 import by.bsuir.dorm.dto.LeisureStudentDto;
+import by.bsuir.dorm.dto.RoomDto;
 import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalStudentDto;
 import by.bsuir.dorm.dto.userpublic.PublicStudentDto;
 import by.bsuir.dorm.model.entity.Student;
 import org.mapstruct.*;
+
+import java.util.UUID;
 
 @Mapper(
 
@@ -46,6 +49,10 @@ public interface StudentMapper {
 
     @Mapping(target = "roomNumber", source = ".", qualifiedByName = "getStudentRoomNumber")
     LeisureStudentDto toLeisureStudentDto(Student student);
+
+    @Mapping(target = "groupNumber", source = "student.group.number")
+    @Mapping(target = "contractId", source = "contractId")
+    RoomDto.StudentDto toRoomStudentDto(Student student, UUID contractId);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @InheritConfiguration(name = "toEntity")
