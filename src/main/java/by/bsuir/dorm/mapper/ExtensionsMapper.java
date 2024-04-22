@@ -6,10 +6,7 @@ import by.bsuir.dorm.dao.RoleRepository;
 import by.bsuir.dorm.dto.RoomInStudentDto;
 import by.bsuir.dorm.exception.GroupNotFoundException;
 import by.bsuir.dorm.exception.RoleNotFoundException;
-import by.bsuir.dorm.model.entity.Contract;
-import by.bsuir.dorm.model.entity.Group;
-import by.bsuir.dorm.model.entity.Role;
-import by.bsuir.dorm.model.entity.Student;
+import by.bsuir.dorm.model.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
@@ -55,5 +52,11 @@ public class ExtensionsMapper {
         final Contract contract = activeContract.get();
         final Integer number = contract.getRoom().getNumber();
         return new RoomInStudentDto(number, contractMapper.toInStudentRoomDto(contract));
+    }
+
+    @Named("getStudentRoomNumber")
+    public Integer getStudentRoomNumber(Student student) {
+        final Optional<Contract> activeContract = contractRepository.findByStudentAndActive(student);
+        return activeContract.map(Contract::getRoom).map(Room::getNumber).orElse(null);
     }
 }

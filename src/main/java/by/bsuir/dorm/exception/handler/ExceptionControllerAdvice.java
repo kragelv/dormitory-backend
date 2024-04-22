@@ -2,7 +2,6 @@ package by.bsuir.dorm.exception.handler;
 
 import by.bsuir.dorm.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.http.HttpStatus;
@@ -57,9 +56,14 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(AuthBearerTokenException.class)
+    public ErrorResponseEntity handleAuthBearerTokenException(final AuthBearerTokenException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ErrorResponseEntity handleAccessDeniedException(final AccessDeniedException ex) {
-        return ErrorResponseEntity.create(ex, HttpStatus.UNAUTHORIZED);
+        return ErrorResponseEntity.create(ex, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(LoginException.class)
@@ -83,16 +87,7 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity
                 .builder()
                 .message("Bearer token expired: " + ex.getClaims().getExpiration().toInstant())
-                .status(HttpStatus.FORBIDDEN)
-                .build();
-    }
-
-    @ExceptionHandler(JwtException.class)
-    public ErrorResponseEntity handleJwtException(final JwtException ex) {
-        return ErrorResponseEntity
-                .builder()
-                .message("Invalid token: " + ex.getMessage())
-                .status(HttpStatus.FORBIDDEN)
+                .status(HttpStatus.UNAUTHORIZED)
                 .build();
     }
 
@@ -164,6 +159,21 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(StudentAlreadyHasContractException.class)
     public ErrorResponseEntity handleStudentAlreadyHasContractException(
             final StudentAlreadyHasContractException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(LeisureNotFoundException.class)
+    public ErrorResponseEntity handleLeisureNotFoundException(final LeisureNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(LeisureStateException.class)
+    public ErrorResponseEntity handleLeisureStateException(final LeisureStateException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(GroupStateException.class)
+    public ErrorResponseEntity handleGroupStateException(final GroupStateException ex) {
         return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
     }
 

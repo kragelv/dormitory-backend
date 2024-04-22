@@ -1,5 +1,6 @@
 package by.bsuir.dorm.mapper;
 
+import by.bsuir.dorm.dto.LeisureStudentDto;
 import by.bsuir.dorm.dto.request.RegisterStudentRequestDto;
 import by.bsuir.dorm.dto.userpersonal.PersonalStudentDto;
 import by.bsuir.dorm.dto.userpublic.PublicStudentDto;
@@ -9,7 +10,10 @@ import org.mapstruct.*;
 @Mapper(
 
         componentModel = "spring",
-        uses = {RoleMapper.class, ExtensionsMapper.class}
+        uses = {
+                RoleMapper.class,
+                ExtensionsMapper.class
+        }
 )
 public interface StudentMapper {
     @Mapping(target = "id", ignore = true)
@@ -40,6 +44,8 @@ public interface StudentMapper {
     @Mapping(target = "group", source = "group.number")
     PublicStudentDto toPublicDto(Student student);
 
+    @Mapping(target = "roomNumber", source = ".", qualifiedByName = "getStudentRoomNumber")
+    LeisureStudentDto toLeisureStudentDto(Student student);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @InheritConfiguration(name = "toEntity")

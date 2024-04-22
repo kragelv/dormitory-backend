@@ -6,6 +6,7 @@ import by.bsuir.dorm.dto.request.GroupRequestDto;
 import by.bsuir.dorm.dto.response.PageResponse;
 import by.bsuir.dorm.exception.GroupAlreadyExistsException;
 import by.bsuir.dorm.exception.GroupNotFoundException;
+import by.bsuir.dorm.exception.GroupStateException;
 import by.bsuir.dorm.mapper.GroupMapper;
 import by.bsuir.dorm.model.entity.Group;
 import by.bsuir.dorm.service.GroupService;
@@ -70,15 +71,20 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteById(UUID id) {
         groupRepository.findById(id).ifPresent(group -> {
+            if (!group.getStudents().isEmpty()) {
+                throw new GroupStateException("Group { id = " + id + " } has students");
+            }
             log.info("Delete group by id { id = " + group.getId() + ", number = " + group.getNumber() + "}");
             groupRepository.delete(group);
         });
-
     }
 
     @Override
     public void deleteByNumber(String number) {
         groupRepository.findBySimpleNaturalId(number).ifPresent(group -> {
+            if (!group.getStudents().isEmpty()) {
+                throw new GroupStateException("Group { number = " + number + " } has students");
+            }
             log.info("Delete group by number { id = " + group.getId() + ", number = " + group.getNumber() + "}");
         });
     }

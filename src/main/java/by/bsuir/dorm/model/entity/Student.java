@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -63,6 +65,20 @@ public class Student extends User {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "father_id")
     private Father father;
+
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @Setter(AccessLevel.NONE)
+    private Set<Leisure> leisures = new LinkedHashSet<>();
+
+    public void addLeisure(Leisure leisure) {
+        leisures.add(leisure);
+        leisure.getStudents().add(this);
+    }
+
+    public void removeLeisure(Leisure leisure) {
+        leisures.remove(leisure);
+        leisure.getStudents().remove(this);
+    }
 
     @Override
     @Transient

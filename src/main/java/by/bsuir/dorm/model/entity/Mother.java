@@ -19,6 +19,6 @@ import java.util.List;
 @DiscriminatorValue("0")
 public class Mother extends Parent {
 
-    @OneToMany(mappedBy = "mother", orphanRemoval = true)
+    @OneToMany(mappedBy = "mother")
     private List<Student> students = new ArrayList<>();
 }

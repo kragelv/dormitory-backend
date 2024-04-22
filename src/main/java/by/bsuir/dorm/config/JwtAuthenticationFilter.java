@@ -1,8 +1,10 @@
 package by.bsuir.dorm.config;
 
+import by.bsuir.dorm.exception.AuthBearerTokenException;
 import by.bsuir.dorm.exception.InvalidTokenException;
 import by.bsuir.dorm.service.jwt.AccessJwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,9 +59,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     jwt,
                     accessJwtService.getValidationParametersJwtAuthenticationFilter()
             ).claims();
+        } catch (ExpiredJwtException ex) {
+            throw ex;
         } catch (JwtException ex) {
-            filterChain.doFilter(request, response);
-            return;
+            throw new AuthBearerTokenException("Bearer token is invalid", ex);
         }
         final String id = claims.getSubject();
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {

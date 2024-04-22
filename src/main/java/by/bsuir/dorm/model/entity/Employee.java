@@ -1,9 +1,13 @@
 package by.bsuir.dorm.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //@AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +19,9 @@ import lombok.Setter;
 public class Employee extends User {
     @Column(name = "residential_address", nullable = false, length = 255)
     private String residentialAddress;
+
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Leisure> leisures = new ArrayList<>();
 
     @Override
     @Transient

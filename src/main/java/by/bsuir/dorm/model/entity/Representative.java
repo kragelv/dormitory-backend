@@ -30,7 +30,12 @@ public class Representative {
     @Embedded
     private Passport passport;
 
-    @OneToOne(mappedBy = "representative", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false, orphanRemoval = true)
+    @OneToOne(
+            mappedBy = "representative",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            optional = false,
+            orphanRemoval = true
+    )
     private Contract contract;
 
 }
