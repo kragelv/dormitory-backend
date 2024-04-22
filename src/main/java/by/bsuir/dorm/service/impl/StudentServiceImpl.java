@@ -36,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.existsByCardId(dto.cardId())) {
             throw new StudentAlreadyExistsException("Student { cardId = } already exists");
         }
-        final Contract contract = contractRepository.findByIdAndStudentNull(dto.contractId())
+        final Contract contract = contractRepository.findByIdAndActiveAndStudentNull(dto.contractId())
                 .orElseThrow(() -> new ContractNotFoundException("Unregistered contract { id = " +
                         dto.contractId() + " } doesn't exist"));
         final Student student = studentMapper.toEntity(dto);
@@ -54,10 +54,10 @@ public class StudentServiceImpl implements StudentService {
         final String cardId = dto.cardId();
         final Student student = studentRepository.findByCardId(cardId)
                 .orElseThrow((() -> new UserNotFoundException("Student { cardId = " + cardId + " } doesn't exist")));
-        final Contract contract = contractRepository.findByIdAndStudentNull(dto.contractId())
+        final Contract contract = contractRepository.findByIdAndActiveAndStudentNull(dto.contractId())
                 .orElseThrow(() -> new ContractNotFoundException("Unregistered contract { id = " +
                         dto.contractId() + " } doesn't exist"));
-        contractRepository.findActiveContractByStudent(student).ifPresent((activeContract) -> {
+        contractRepository.findByStudentAndActive(student).ifPresent((activeContract) -> {
             throw new StudentAlreadyHasContractException("Student has contract { id = "
                     + activeContract.getId() + " }");
         });

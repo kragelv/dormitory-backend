@@ -5,6 +5,7 @@ import by.bsuir.dorm.dao.RoomRepository;
 import by.bsuir.dorm.dao.StudentRepository;
 import by.bsuir.dorm.dto.ContractDto;
 import by.bsuir.dorm.dto.request.ContractCreateRequestDto;
+import by.bsuir.dorm.dto.request.ContractFilter;
 import by.bsuir.dorm.dto.response.PageResponse;
 import by.bsuir.dorm.exception.ContractNotFoundException;
 import by.bsuir.dorm.exception.RoomNotFoundException;
@@ -70,10 +71,14 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public PageResponse<ContractDto> getAll(int page, int limit) {
+    public PageResponse<ContractDto> getAll(int page, int limit, ContractFilter filter) {
         final Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "date"));
-        final Page<Contract> pageResult = contractRepository.findAll(pageable);
-        log.info("Get contracts [page = " + page + ", limit = " + limit + "] : totalElements = "
+        final Page<Contract> pageResult = switch (filter) {
+            case ACTIVE -> contractRepository.findAllActive(pageable);
+            case REG -> contractRepository.findAllActiveAndStudentNull(pageable);
+            default -> contractRepository.findAll(pageable);
+        };
+        log.info("Get contracts [page = " + page + ", limit = " + limit + ", filter = " + filter + "] : totalElements = "
                 + pageResult.getTotalElements() + ", numberOfElements = " + pageResult.getNumberOfElements());
         return PageResponse.create(pageResult, contractMapper::toDto);
     }
@@ -87,7 +92,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void terminate(UUID id) {
-        final Contract contract = contractRepository.findActiveContractById(id)
+        final Contract contract = contractRepository.findByIdActive(id)
                 .orElseThrow(() -> new ContractNotFoundException("Active contract { id = " + id + "} doesn't exist"));
         contract.setTerminationDate(LocalDate.now());
         contractRepository.save(contract);

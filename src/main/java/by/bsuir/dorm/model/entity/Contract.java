@@ -54,13 +54,13 @@ public class Contract {
     @Column(name = "date", nullable = false, updatable = false)
     private LocalDate date;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = false, updatable = false)
     private LocalDate startDate;
 
-    @Column(name = "expiry_date", nullable = false)
+    @Column(name = "expiry_date", nullable = false, updatable = false)
     private LocalDate expiryDate;
 
-    @Column(name = "termination_date", updatable = false)
+    @Column(name = "termination_date")
     private LocalDate terminationDate;
 
     @Column(name = "room_number", nullable = false)

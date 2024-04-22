@@ -48,7 +48,7 @@ public class ExtensionsMapper {
 
     @Named("getStudentRoom")
     public RoomInStudentDto getStudentRoom(Student student) {
-        final Optional<Contract> activeContract = contractRepository.findActiveContractByStudent(student);
+        final Optional<Contract> activeContract = contractRepository.findByStudentAndActive(student);
         if (activeContract.isEmpty()) {
             return null;
         }
