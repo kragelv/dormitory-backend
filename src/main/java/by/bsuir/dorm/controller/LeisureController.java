@@ -35,7 +35,7 @@ public class LeisureController {
         return leisureService.getAll(page - 1, limit, organizer, student);
     }
 
-    @PreAuthorize("hasAnyAuthority('TYPE_EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('TYPE_EMPLOYEE', 'TYPE_STUDENT')")
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -64,6 +64,16 @@ public class LeisureController {
     public void delete(@PathVariable("id") UUID id) {
         leisureService.deleteById(id);
     }
+
+    @PreAuthorize("hasAnyAuthority('TYPE_STUDENT')")
+    @PostMapping("/{id}/is-participant")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public boolean isParticipant(@PathVariable("id") UUID id) {
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return leisureService.isParticipant(username, id);
+    }
+
+
 
     @PreAuthorize("hasAnyAuthority('TYPE_STUDENT')")
     @PostMapping("/{id}/join")

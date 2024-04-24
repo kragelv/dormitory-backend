@@ -116,6 +116,15 @@ public class LeisureServiceImpl implements LeisureService {
     }
 
     @Override
+    public boolean isParticipant(String username, UUID leisureId) {
+        final Student student = userSecurityService.findStudentByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Student { id = " + username + " } doesn't exist"));
+        leisureRepository.findById(leisureId)
+                .orElseThrow(() -> new LeisureNotFoundException("Leisure { id = " + leisureId + " } doesn't exist"));
+        return leisureRepository.existsByIdAndStudentsContains(leisureId, student);
+    }
+
+    @Override
     public void studentJoin(String username, UUID leisureId) {
         final Student student = userSecurityService.findStudentByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Student { id = " + username + " } doesn't exist"));

@@ -17,4 +17,6 @@ public interface LeisureRepository extends JpaRepository<Leisure, UUID> {
     Page<Leisure> findByStudentsContains(Student student, Pageable pageable);
 
     Page<Leisure> findByOrganizerAndStudentsContains(Employee organizer, Student student, Pageable pageable);
+
+    boolean existsByIdAndStudentsContains(UUID id, Student student);
 }

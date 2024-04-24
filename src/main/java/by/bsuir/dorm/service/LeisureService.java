@@ -23,4 +23,5 @@ public interface LeisureService {
 
     void studentLeave(String username, UUID leisureId);
 
+    boolean isParticipant(String username, UUID leisureId);
 }
