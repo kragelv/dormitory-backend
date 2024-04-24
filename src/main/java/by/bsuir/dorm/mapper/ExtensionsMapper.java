@@ -66,4 +66,17 @@ public class ExtensionsMapper {
         final List<Contract> activeContracts = contractRepository.findAllActiveByRoom(room);
         return activeContracts.size();
     }
+
+    @Named("itemStringToItems")
+    public RegulationItem itemStringToItems(String item) {
+        final String[] items = item.split("\\.");
+        RegulationItem prev = null;
+        for (String s : items) {
+            final RegulationItem current = new RegulationItem();
+            current.setNumber(Short.valueOf(s));
+            current.setParent(prev);
+            prev = current;
+        }
+        return prev;
+    }
 }

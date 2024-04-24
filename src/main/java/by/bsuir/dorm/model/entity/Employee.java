@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 //@AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +24,9 @@ public class Employee extends User {
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Leisure> leisures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "caretaker", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private Set<ReportingNote> reportingNotes = new LinkedHashSet<>();
 
     @Override
     @Transient

@@ -81,6 +81,9 @@ public class Student extends User {
     @Setter(AccessLevel.NONE)
     private Set<Leisure> leisures = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private Set<StudentViolation> violations = new LinkedHashSet<>();
+
     public void addLeisure(Leisure leisure) {
         leisures.add(leisure);
         leisure.getStudents().add(this);

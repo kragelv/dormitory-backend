@@ -187,6 +187,22 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(RegulationNotFoundException.class)
+    public ErrorResponseEntity handleRegulationNotFoundException(final RegulationNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RegulationStateException.class)
+    public ErrorResponseEntity handleRegulationStateException(final RegulationStateException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RegulationAlreadyExistsException.class)
+    public ErrorResponseEntity handleRegulationAlreadyExistsException(
+            final RegulationAlreadyExistsException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity handleRuntimeException(final RuntimeException ex) {
         log.error(ex.getMessage(), ex);
