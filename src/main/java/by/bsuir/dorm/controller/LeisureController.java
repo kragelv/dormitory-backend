@@ -66,8 +66,9 @@ public class LeisureController {
     }
 
     @PreAuthorize("hasAnyAuthority('TYPE_STUDENT')")
-    @PostMapping("/{id}/is-participant")
+    @GetMapping("/{id}/is-participant")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
     public boolean isParticipant(@PathVariable("id") UUID id) {
         final String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return leisureService.isParticipant(username, id);
