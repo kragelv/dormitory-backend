@@ -106,6 +106,7 @@ public class LeisureServiceImpl implements LeisureService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LeisureStudentDto> getStudentsByLeisureId(UUID id) {
         final Leisure leisure = leisureRepository.findById(id)
                 .orElseThrow(() -> new LeisureNotFoundException("Leisure { id = " + id + " } doesn't exist"));
@@ -116,6 +117,7 @@ public class LeisureServiceImpl implements LeisureService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isParticipant(String username, UUID leisureId) {
         final Student student = userSecurityService.findStudentByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Student { id = " + username + " } doesn't exist"));
