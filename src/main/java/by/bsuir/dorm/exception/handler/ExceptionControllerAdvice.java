@@ -203,6 +203,16 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ReportingNoteNotFoundException.class)
+    public ErrorResponseEntity handleReportingNoteNotFoundException(final ReportingNoteNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ReportingNoteStateException.class)
+    public ErrorResponseEntity handleReportingNoteStateException(final ReportingNoteStateException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity handleRuntimeException(final RuntimeException ex) {
         log.error(ex.getMessage(), ex);

@@ -1,11 +1,9 @@
 package by.bsuir.dorm.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -28,11 +26,29 @@ public class ReportingNote {
     @JoinColumn(name = "caretaker_id", nullable = false)
     private Employee caretaker;
 
-    @Column(name = "created", nullable = false)
-    private LocalDate created;
+    @Column(name = "r_date", nullable = false)
+    private LocalDate date;
+
+    @Column(name = "approved_date")
+    private Instant approved;
 
     @OneToMany(mappedBy = "reportingNote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter(AccessLevel.NONE)
     private Set<StudentViolation> violations = new LinkedHashSet<>();
+
+    public void addViolation(StudentViolation violation) {
+        violations.add(violation);
+        violation.setReportingNote(this);
+    }
+
+    public void removeViolation(StudentViolation violation) {
+        violations.remove(violation);
+        violation.setReportingNote(null);
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "decree_id")
+    private Decree decree;
 
     @Override
     public boolean equals(Object o) {

@@ -59,12 +59,12 @@ public class Student extends User {
     @Setter(AccessLevel.NONE)
     private List<Contract> contracts = new ArrayList<>();
 
-    private void addContract(Contract contract) {
+    public void addContract(Contract contract) {
         contracts.add(contract);
         contract.setStudent(this);
     }
 
-    private void removeContract(Contract contract) {
+    public void removeContract(Contract contract) {
         contracts.remove(contract);
         contract.setStudent(null);
     }
@@ -78,20 +78,20 @@ public class Student extends User {
     private Father father;
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @Setter(AccessLevel.NONE)
     private Set<Leisure> leisures = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @Setter(AccessLevel.NONE)
     private Set<StudentViolation> violations = new LinkedHashSet<>();
 
-    public void addLeisure(Leisure leisure) {
-        leisures.add(leisure);
-        leisure.getStudents().add(this);
+    public void addViolation(StudentViolation violation) {
+        violations.add(violation);
+        violation.setStudent(this);
     }
 
-    public void removeLeisure(Leisure leisure) {
-        leisures.remove(leisure);
-        leisure.getStudents().remove(this);
+    public void removeViolation(StudentViolation violation) {
+        violations.remove(violation);
+        violation.setStudent(null);
     }
 
     @Override

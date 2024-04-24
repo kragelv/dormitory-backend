@@ -1,10 +1,7 @@
 package by.bsuir.dorm.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -43,7 +40,18 @@ public class Leisure {
     @JoinTable(name = "m2m_leisure_students",
             joinColumns = @JoinColumn(name = "leisure_id"),
             inverseJoinColumns = @JoinColumn(name = "students_id"))
+    @Setter(AccessLevel.NONE)
     private List<Student> students = new ArrayList<>();
+
+    public void addStudent(Student student) {
+        students.add(student);
+        student.getLeisures().add(this);
+    }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
+        student.getLeisures().remove(this);
+    }
 
     @Override
     public boolean equals(Object o) {

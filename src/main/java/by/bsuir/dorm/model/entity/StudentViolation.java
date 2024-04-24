@@ -17,15 +17,15 @@ import java.util.UUID;
 @Entity
 @Table(name = "tbl_student_report")
 public class StudentViolation {
-    @EmbeddedId
-    private StudentViolationKey key;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false)
+    private UUID id;
 
-    @MapsId("studentId")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @MapsId("reportingNoteId")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
     @JoinColumn(name = "reporting_note_id", nullable = false)
     private ReportingNote reportingNote;
@@ -40,16 +40,7 @@ public class StudentViolation {
     @Column(name = "content", nullable = false, length = 512)
     private String content;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StudentViolation other = (StudentViolation) o;
-        return Objects.equals(key, other.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key);
-    }
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "decree_result_id")
+    private DecreeResult decreeResult;
 }

@@ -38,19 +38,7 @@ public class Role implements Comparable<Role> {
             mappedBy = "roles",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
-    @Setter(AccessLevel.NONE)
     private List<User> users = new ArrayList<>();
-
-    public void addUser(User user) {
-        users.add(user);
-        user.getRoles().add(this);
-    }
-
-    public void removeUser(User user) {
-        users.remove(user);
-        user.getRoles().remove(this);
-    }
-
 
     @Override
     public boolean equals(Object o) {
