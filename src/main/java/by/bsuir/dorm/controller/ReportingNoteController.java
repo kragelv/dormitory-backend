@@ -57,6 +57,14 @@ public class ReportingNoteController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_CARETAKER')")
+    @PostMapping("/{id}/approve")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void approveForDecree(@PathVariable("id") UUID id) {
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        reportsService.approveForDecree(username, id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_CARETAKER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") UUID id) {

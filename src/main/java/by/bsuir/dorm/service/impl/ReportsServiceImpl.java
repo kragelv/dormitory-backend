@@ -9,7 +9,6 @@ import by.bsuir.dorm.exception.ReportingNoteStateException;
 import by.bsuir.dorm.mapper.ReportingNoteMapper;
 import by.bsuir.dorm.model.entity.Employee;
 import by.bsuir.dorm.model.entity.ReportingNote;
-import by.bsuir.dorm.model.entity.User;
 import by.bsuir.dorm.service.ReportsService;
 import by.bsuir.dorm.service.UserSecurityService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -72,5 +73,22 @@ public class ReportsServiceImpl implements ReportsService {
             reportingNoteRepository.delete(reportingNote);
             log.info("Delete Reporting note { id = " + id + " }");
         });
+    }
+
+    @Override
+    public void approveForDecree(String approvedBy, UUID id) {
+        final Employee employee = userSecurityService.findEmployeeByUsername(approvedBy)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid employee id = " + approvedBy));
+        final ReportingNote reportingNote = reportingNoteRepository.findById(id)
+                .orElseThrow(() -> new ReportingNoteNotFoundException("Reporting note { id = " + id + " } doesn't exist"));
+        if (employee.getId() != reportingNote.getCaretaker().getId()) {
+            throw new AccessDeniedException("Invalid resource owner");
+        }
+        if (reportingNote.getDecree() != null) {
+            throw new ReportingNoteStateException("Reporting note { id = " + id + " } has decree");
+        }
+        reportingNote.setApproved(Instant.now());
+        reportingNoteRepository.save(reportingNote);
+        log.info("Approve for decree Reporting note { id = " + id + " }");
     }
 }

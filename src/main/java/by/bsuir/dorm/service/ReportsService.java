@@ -14,4 +14,6 @@ public interface ReportsService {
     UUID create(String creator, ReportingNoteCreateRequestDto dto);
 
     void deleteById(UUID id);
+
+    void approveForDecree(String approvedBy, UUID id);
 }
