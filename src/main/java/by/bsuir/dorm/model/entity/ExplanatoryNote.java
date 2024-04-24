@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -29,4 +33,22 @@ public class ExplanatoryNote {
 
     @Column(name = "content", nullable = false, length = 512)
     private String content;
+
+    @UpdateTimestamp
+    private Instant updated;
+
+    @OneToOne(mappedBy = "explanatoryNote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+    private StudentViolation studentViolation;
+
+    public void addStudentViolation(StudentViolation studentViolation) {
+        studentViolation.setExplanatoryNote(this);
+        this.studentViolation = studentViolation;
+    }
+
+    public void removeStudentViolation() {
+        if (studentViolation != null) {
+            studentViolation.setExplanatoryNote(null);
+            studentViolation = null;
+        }
+    }
 }

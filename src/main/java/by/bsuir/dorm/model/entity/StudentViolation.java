@@ -43,4 +43,8 @@ public class StudentViolation {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "decree_result_id")
     private DecreeResult decreeResult;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "explanatory_note_id")
+    private ExplanatoryNote explanatoryNote;
 }

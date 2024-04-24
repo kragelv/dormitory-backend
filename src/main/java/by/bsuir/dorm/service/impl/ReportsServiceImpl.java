@@ -35,6 +35,7 @@ public class ReportsServiceImpl implements ReportsService {
     private final ReportingNoteMapper reportingNoteMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<ReportingNoteDto> getAllByOwner(String username, int page, int limit) {
         final Employee owner = userSecurityService.findEmployeeByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Employee { id = " + username + " } not found"));
@@ -46,6 +47,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReportingNoteDto getById(UUID id) {
         final ReportingNote reportingNote = reportingNoteRepository.findById(id)
                 .orElseThrow(() -> new ReportingNoteNotFoundException("Reporting note { id = " + id + " } doesn't exist"));

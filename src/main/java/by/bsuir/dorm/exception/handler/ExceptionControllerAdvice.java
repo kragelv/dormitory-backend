@@ -213,6 +213,22 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ViolationNotFoundException.class)
+    public ErrorResponseEntity handleViolationNotFoundException(final ViolationNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ExplanatoryNotFoundException.class)
+    public ErrorResponseEntity handleExplanatoryNotFoundException(final ExplanatoryNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ExplanatoryNoteAlreadyExistsException.class)
+    public ErrorResponseEntity handleExplanatoryNoteAlreadyExistsException(
+            final ExplanatoryNoteAlreadyExistsException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity handleRuntimeException(final RuntimeException ex) {
         log.error(ex.getMessage(), ex);
