@@ -11,21 +11,13 @@ public record ReportingNoteDto(
         UUID id,
         LocalDate date,
         Instant approved,
-        List<StudentViolationDto> violations,
-        DecreeDto decree) {
+        List<StudentViolationDto> violations) {
     public record StudentViolationDto(
             UUID studentId,
             FullNameDto studentFullName,
             LocalDate date,
             String content,
             Instant explanatoryNoteUpdated
-    ) {
-    }
-
-    public record DecreeDto(
-            UUID id,
-            Integer number,
-            LocalDate date
     ) {
     }
 }

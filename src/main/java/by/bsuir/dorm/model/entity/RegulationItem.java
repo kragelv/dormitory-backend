@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "regulation_item",
+@Table(name = "tbl_regulation_item",
         uniqueConstraints = @UniqueConstraint(columnNames = {"number", "parent_id"}))
 public class RegulationItem {
     @Id

@@ -1,6 +1,7 @@
 package by.bsuir.dorm.mapper;
 
 import by.bsuir.dorm.dto.ReportingNoteDto;
+import by.bsuir.dorm.dto.ReportingNoteInDecreeDto;
 import by.bsuir.dorm.dto.request.ReportingNoteCreateRequestDto;
 import by.bsuir.dorm.model.entity.ReportingNote;
 import org.mapstruct.CollectionMappingStrategy;
@@ -19,4 +20,6 @@ public interface ReportingNoteMapper {
     ReportingNote toEntity(ReportingNoteCreateRequestDto reportingNoteDto);
 
     ReportingNoteDto toDto(ReportingNote reportingNote);
+
+    ReportingNoteInDecreeDto toInDecreeDto(ReportingNote reportingNote);
 }

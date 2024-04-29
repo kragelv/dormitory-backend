@@ -1,10 +1,7 @@
 package by.bsuir.dorm.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -37,6 +34,16 @@ public class Decree {
     private String createdByFullName;
 
     @OneToMany(mappedBy = "decree", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+    @Setter(AccessLevel.NONE)
     private Set<ReportingNote> reportingNotes = new LinkedHashSet<>();
 
+    public void addReportingNote(ReportingNote reportingNote) {
+        reportingNotes.add(reportingNote);
+        reportingNote.setDecree(this);
+    }
+
+    public void removeReportingNote(ReportingNote reportingNote) {
+        reportingNotes.remove(reportingNote);
+        reportingNote.setDecree(null);
+    }
 }

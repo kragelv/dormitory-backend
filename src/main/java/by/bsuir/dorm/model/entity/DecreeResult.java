@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "decree_result")
+@Table(name = "tbl_decree_result")
 @NaturalIdCache
 public class DecreeResult {
     @Id

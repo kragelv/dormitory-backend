@@ -1,8 +1,9 @@
 package by.bsuir.dorm.config;
 
+import by.bsuir.dorm.dao.DecreeResultRepository;
 import by.bsuir.dorm.dao.RoleRepository;
-import by.bsuir.dorm.dao.RoomRepository;
 import by.bsuir.dorm.dao.UserTypeRepository;
+import by.bsuir.dorm.mapper.DecreeResultMapper;
 import by.bsuir.dorm.mapper.RoleMapper;
 import by.bsuir.dorm.mapper.UserTypeMapper;
 import by.bsuir.dorm.model.entity.*;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,7 +26,8 @@ public class DbDataConfig {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final UserTypeMapper userTypeMapper;
-    private final RoomRepository roomRepository;
+    private final DecreeResultRepository decreeResultRepository;
+    private final DecreeResultMapper decreeResultMapper;
 
     @EventListener
     @Transactional
@@ -38,6 +39,8 @@ public class DbDataConfig {
         seedRoles(employeeRoleNames);
         userTypeRepository.findBySimpleNaturalId(employeeEmpty.getTypename()).ifPresent(employee ->
                 seedAssociationRoleUserType(employee, employeeRoleNames));
+        List<String> decreeResults = List.of("Замечание", "Выговор");
+        seedDecreeResult(decreeResults);
     }
 
     private List<String> prefixRoles(List<String> roles) {
@@ -81,5 +84,14 @@ public class DbDataConfig {
         for (Role associationRole : associationRoles) {
             userType.addRole(associationRole);
         }
+    }
+
+    private void seedDecreeResult(List<String> decreeResults) {
+        decreeResultRepository.saveAll(
+                decreeResults.stream()
+                        .filter(name -> decreeResultRepository.findBySimpleNaturalId(name).isEmpty())
+                        .map(decreeResultMapper::toEntity)
+                        .toList()
+        );
     }
 }

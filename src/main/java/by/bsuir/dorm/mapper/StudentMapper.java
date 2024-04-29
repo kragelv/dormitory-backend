@@ -48,6 +48,7 @@ public interface StudentMapper {
     PublicStudentDto toPublicDto(Student student);
 
     @Mapping(target = "roomNumber", source = ".", qualifiedByName = "getStudentRoomNumber")
+    @Mapping(target = "groupNumber", source = "group.number")
     LeisureStudentDto toLeisureStudentDto(Student student);
 
     @Mapping(target = "groupNumber", source = "student.group.number")

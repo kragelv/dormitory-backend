@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "tbl_internal_requlation")
+@Table(name = "tbl_internal_regulation")
 @NaturalIdCache
 public class InternalRegulation {
     @Id

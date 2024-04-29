@@ -229,6 +229,22 @@ public class ExceptionControllerAdvice {
         return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(DecreeNotFoundException.class)
+    public ErrorResponseEntity handleDecreeNotFoundException(final DecreeNotFoundException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DecreeStateException.class)
+    public ErrorResponseEntity handleDecreeStateException(final DecreeStateException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidDecreeDataException.class)
+    public ErrorResponseEntity handleInvalidDecreeDataException(
+            final InvalidDecreeDataException ex) {
+        return ErrorResponseEntity.create(ex, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity handleRuntimeException(final RuntimeException ex) {
         log.error(ex.getMessage(), ex);

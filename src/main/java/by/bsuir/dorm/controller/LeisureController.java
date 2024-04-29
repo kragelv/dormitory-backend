@@ -74,8 +74,6 @@ public class LeisureController {
         return leisureService.isParticipant(username, id);
     }
 
-
-
     @PreAuthorize("hasAnyAuthority('TYPE_STUDENT')")
     @PostMapping("/{id}/join")
     @ResponseStatus(HttpStatus.NO_CONTENT)
