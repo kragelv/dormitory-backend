@@ -17,7 +17,6 @@ import java.util.UUID;
 @Service
 public class RefreshJwtServiceImpl implements RefreshJwtService {
     private final TokenPropertiesProvider tokenPropertiesProvider;
-
     private final JwtTokenValidationParameters validationParameters;
     private final JwtTokenValidationParameters validationParametersWithoutLifetime;
 
@@ -43,13 +42,13 @@ public class RefreshJwtServiceImpl implements RefreshJwtService {
     }
 
     @Override
-    public Claims getClaims(UserDetails userDetails, UUID sessionId) {
+    public Claims getClaims(UserDetails userDetails, UUID pairId) {
         final Instant now = Instant.now();
         final Instant expirationTime = now.plus(tokenPropertiesProvider.getRefreshToken().duration());
         return Jwts
                 .claims()
                 .subject(userDetails.getUsername())
-                .add(REFRESH_SID, sessionId)
+                .add(TOKENS_PAIR_ID, pairId)
                 .issuer(tokenPropertiesProvider.getIssuer())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expirationTime))

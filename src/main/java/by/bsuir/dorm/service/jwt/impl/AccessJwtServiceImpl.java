@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,11 +47,12 @@ public class AccessJwtServiceImpl implements AccessJwtService {
     }
 
     @Override
-    public Claims getClaims(User user) {
+    public Claims getClaims(User user, UUID pairId) {
         final Instant now = Instant.now();
         final Instant expirationTime = now.plus(tokenPropertiesProvider.getAccessToken().duration());
         return Jwts
                 .claims()
+                .add(TOKENS_PAIR_ID, pairId)
                 .add(
                         ACCESS_AUTHORITIES,
                         user.getAuthorities()

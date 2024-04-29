@@ -5,6 +5,9 @@ import io.jsonwebtoken.*;
 import javax.crypto.SecretKey;
 
 public interface JwtService {
+
+    String TOKENS_PAIR_ID = "tid";
+
     SecretKey getSecretKey();
 
     default String createToken(Claims claims) {

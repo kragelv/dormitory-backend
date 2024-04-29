@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -49,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
     private static final String COOKIE_REFRESH_TOKEN = "refresh-token";
     private static final String COOKIE_REFRESH_PATH = "/api/v1/auth";
     private static final String COOKIE_ATTR_EXPIRES = "Expires";
+    private static final String COOKIE_ATTR_SAME_SITE = "SameSite";
     private static final DateTimeFormatter expiresCookieFormatter =
             DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneOffset.UTC);
 
@@ -76,18 +79,15 @@ public class AuthServiceImpl implements AuthService {
         } catch (AuthenticationException ex) {
             throw new LoginException("Authentication failed", ex);
         }
-        final String accessToken = accessJwtService.createToken(accessJwtService.getClaims(user));
-        final UUID sessionId = UUID.randomUUID();
-        final Claims refreshClaims = refreshJwtService.getClaims(user, sessionId);
+        final UUID pairId = UUID.randomUUID();
+        final String accessToken = accessJwtService.createToken(accessJwtService.getClaims(user, pairId));
+        final Claims refreshClaims = refreshJwtService.getClaims(user, pairId);
         final String refreshToken = refreshJwtService.createToken(refreshClaims);
         final Instant refreshTokenExpirationTime = refreshClaims.getExpiration().toInstant();
-        final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(user, sessionId);
+        final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(user, pairId);
         final RefreshToken refreshTokenEntity = new RefreshToken(refreshTokenKey, refreshTokenExpirationTime);
         refreshTokenRepository.saveAndFlush(refreshTokenEntity);
-        final Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN, refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath(COOKIE_REFRESH_PATH);
-        cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
+        final Cookie cookie = buildRefreshTokenCookie(refreshToken, refreshTokenExpirationTime);
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } logged in");
         return new AccessResponseDto(accessToken, userMapper.toUserInAccessDto(user));
@@ -110,8 +110,10 @@ public class AuthServiceImpl implements AuthService {
         }
         final String accessSubjectClaim = accessTokenClaims.getSubject();
         final UUID accessUserId;
+        final UUID accessPairId;
         try {
             accessUserId = UUID.fromString(accessSubjectClaim);
+            accessPairId = UUID.fromString((String) accessTokenClaims.get(accessJwtService.TOKENS_PAIR_ID));
         } catch (IllegalArgumentException ex) {
             throw new InvalidTokenException("Access token payload is not valid");
         }
@@ -126,43 +128,60 @@ public class AuthServiceImpl implements AuthService {
         }
         final String refreshSubjectClaim = refreshClaims.getSubject();
         final UUID refreshUserId;
-        final UUID sessionId;
+        final UUID refreshPairId;
         try {
             refreshUserId = UUID.fromString(refreshSubjectClaim);
-            sessionId = UUID.fromString((String) refreshClaims.get(refreshJwtService.REFRESH_SID));
+            refreshPairId = UUID.fromString((String) refreshClaims.get(refreshJwtService.TOKENS_PAIR_ID));
         } catch (IllegalArgumentException | ClassCastException ex) {
             throw new InvalidTokenException("Refresh token payload is not valid");
         }
-        if (!Objects.equals(accessUserId, refreshUserId))
-            throw new InvalidTokenException("The refresh token can't be applied to the provided access token" +
-                    " because tokens' payload is inconsistent");
         final User user = userRepository.findById(refreshUserId)
                 .orElseThrow(() -> new InvalidTokenException("Tokens' subject is not found"));
-        final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(user, sessionId);
+        if (!Objects.equals(accessUserId, refreshUserId)) {
+            deleteAllRefreshTokens(user);
+            throw new InvalidTokenException("The refresh token can't be applied to the provided access token" +
+                    " because tokens' payload is inconsistent");
+        }
+        final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(user, refreshPairId);
         try {
             refreshJwtService.validateToken(
                     refreshToken,
                     refreshJwtService.getValidationParameters()
             );
         } catch (ExpiredJwtException ex) {
-            refreshTokenRepository.deleteById(refreshTokenKey);
+            deleteRefreshTokenById(refreshTokenKey);
             throw new InvalidTokenException("The refresh token is expired. Try to login");
+        }
+        if (!Objects.equals(accessPairId, refreshPairId)) {
+            deleteAllRefreshTokens(user);
+            throw new InvalidTokenException("The refresh token can't be applied to the provided access token" +
+                    " because tokens' payload is inconsistent");
         }
         final RefreshToken refreshTokenEntity = refreshTokenRepository.findById(refreshTokenKey)
                 .orElseThrow(() -> new InvalidTokenException("The refresh token is not valid"));
-        final String newAccessToken = accessJwtService.createToken(accessJwtService.getClaims(user));
-        final Claims newRefreshClaims = refreshJwtService.getClaims(user, sessionId);
+        deleteRefreshTokenById(refreshTokenEntity.getRefreshTokenKey());
+        final UUID newPairId = UUID.randomUUID();
+        final String newAccessToken = accessJwtService.createToken(accessJwtService.getClaims(user, newPairId));
+        final Claims newRefreshClaims = refreshJwtService.getClaims(user, newPairId);
         final String newRefreshToken = refreshJwtService.createToken(newRefreshClaims);
         final Instant refreshTokenExpirationTime = newRefreshClaims.getExpiration().toInstant();
-        refreshTokenEntity.setExpirationTime(refreshTokenExpirationTime);
-        refreshTokenRepository.saveAndFlush(refreshTokenEntity);
-        final Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN, newRefreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath(COOKIE_REFRESH_PATH);
-        cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(refreshTokenExpirationTime));
+        final RefreshTokenKey newRefreshTokenKey = new RefreshTokenKey(user, newPairId);
+        final RefreshToken newRefreshTokenEntity = new RefreshToken(newRefreshTokenKey, refreshTokenExpirationTime);
+        refreshTokenRepository.saveAndFlush(newRefreshTokenEntity);
+        final Cookie cookie = buildRefreshTokenCookie(newRefreshToken, refreshTokenExpirationTime);
         response.addCookie(cookie);
         log.info("User { id = " + user.getId() + ", cardId = " + user.getCardId() + " } refreshed");
         return new AccessResponseDto(newAccessToken, userMapper.toUserInAccessDto(user));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteAllRefreshTokens(User user) {
+        refreshTokenRepository.deleteByRefreshTokenKeyUser(user);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteRefreshTokenById(RefreshTokenKey key) {
+        refreshTokenRepository.deleteById(key);
     }
 
     @Override
@@ -193,18 +212,27 @@ public class AuthServiceImpl implements AuthService {
                     }
                     final String refreshSubjectClaim = refreshClaims.getSubject();
                     final UUID refreshUserId;
-                    final UUID sessionId;
+                    final UUID pairId;
                     try {
                         refreshUserId = UUID.fromString(refreshSubjectClaim);
-                        sessionId = UUID.fromString((String) refreshClaims.get(refreshJwtService.REFRESH_SID));
+                        pairId = UUID.fromString((String) refreshClaims.get(refreshJwtService.TOKENS_PAIR_ID));
                     } catch (IllegalArgumentException ex) {
                         return;
                     }
                     final User refUser = userRepository.getReferenceById(refreshUserId);
-                    final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(refUser, sessionId);
+                    final RefreshTokenKey refreshTokenKey = new RefreshTokenKey(refUser, pairId);
                     refreshTokenRepository.deleteById(refreshTokenKey);
-                    log.info("User { id = " + refreshUserId + ", sessionId = " + sessionId + " } logged out");
+                    log.info("User { id = " + refreshUserId + ", pairId = " + pairId + " } logged out");
                 });
+    }
+
+    private static Cookie buildRefreshTokenCookie(String refreshToken, Instant expires) {
+        final Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN, refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath(COOKIE_REFRESH_PATH);
+        cookie.setAttribute(COOKIE_ATTR_EXPIRES, expiresCookieFormatter.format(expires));
+        cookie.setAttribute(COOKIE_ATTR_SAME_SITE, "Strict");
+        return cookie;
     }
 
     private static Optional<String> getFirstCookieValue(HttpServletRequest request, String cookieName) {

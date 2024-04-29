@@ -22,8 +22,8 @@ public class RefreshTokenKey implements Serializable {
             optional = false)
     private User user;
 
-    @Column(name = "session_id", nullable = false)
-    private UUID sessionId;
+    @Column(name = "pair_id", nullable = false)
+    private UUID pairId;
 
     @Override
     public boolean equals(Object o) {
@@ -35,11 +35,11 @@ public class RefreshTokenKey implements Serializable {
         }
         RefreshTokenKey other = (RefreshTokenKey) o;
         return Objects.equals(user.getId(), other.getUser().getId())
-                && Objects.equals(other.getSessionId(), sessionId);
+                && Objects.equals(other.getPairId(), pairId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user.getId(), sessionId);
+        return Objects.hash(user.getId(), pairId);
     }
 }
