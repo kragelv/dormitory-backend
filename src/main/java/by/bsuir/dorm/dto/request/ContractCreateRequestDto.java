@@ -6,9 +6,6 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 public record ContractCreateRequestDto(
-        @NotBlankIfPresent
-        @Size(max = 64)
-        String cardId,
 
         @NotBlank
         @Size(max = 40)

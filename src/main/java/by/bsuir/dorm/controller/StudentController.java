@@ -33,7 +33,7 @@ public class StudentController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_CARETAKER')")
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<UUID> updateExistingStudent(@Valid @RequestBody RegisterStudentRequestDto dto) {
         final UUID id = studentService.update(dto);
         return ResponseEntity.ok()

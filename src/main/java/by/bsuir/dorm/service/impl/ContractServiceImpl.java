@@ -43,14 +43,6 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public UUID create(String creator, ContractCreateRequestDto dto) {
-        final String cardId = dto.cardId();
-        final Student student;
-        if (cardId == null) {
-            student = null;
-        } else {
-            student = studentRepository.findByCardId(cardId)
-                    .orElseThrow((() -> new UserNotFoundException("Student { cardId = " + cardId + " } doesn't exist")));
-        }
         final Integer roomNumber = dto.roomNumber();
         final Room room = roomRepository.getReferenceBySimpleNaturalId(roomNumber).
                 orElseThrow(() -> new RoomNotFoundException("Room { number = " + roomNumber + " } doesn't exist"));
@@ -60,7 +52,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setNumber(0);
         contract.setTerminationDate(null);
         contract.setRoom(room);
-        contract.setStudent(student);
+        contract.setStudent(null);
         contract.setCreatedBy(createdBy);
         contract.setCreatedByFullName(createdBy.getFullName().toString());
         final Contract saved = contractRepository.save(contract);
