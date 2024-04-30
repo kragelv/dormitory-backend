@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2024/04/30-001-changelog-init.yaml
+  - include:
+      file: db/changelog/2024/04/30-002-changelog-mysql-event.yaml

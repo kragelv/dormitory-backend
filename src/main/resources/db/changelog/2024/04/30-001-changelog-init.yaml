@@ -1,0 +1,1251 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1714434374405-1
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: leisure_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: students_id
+                  type: binary(16)
+            tableName: m2m_leisure_students
+  - changeSet:
+      id: 1714434374405-2
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role_id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_type_id
+                  type: INT
+            tableName: m2m_role_user_type
+  - changeSet:
+      id: 1714434374405-3
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_m2m_user_roles
+                  name: roles_id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_m2m_user_roles
+                  name: user_id
+                  type: binary(16)
+            tableName: m2m_user_roles
+  - changeSet:
+      id: 1714434374405-4
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_contract
+                  name: id
+                  type: binary(16)
+              - column:
+                  name: student_id
+                  type: binary(16)
+              - column:
+                  name: room_id
+                  type: binary(16)
+              - column:
+                  name: card_id
+                  type: VARCHAR(64)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry_date
+                  type: DATE
+              - column:
+                  name: termination_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: room_number
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone_number
+                  type: VARCHAR(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: residential_address
+                  type: VARCHAR(255)
+              - column:
+                  name: representative_id
+                  type: binary(16)
+              - column:
+                  name: created_by_id
+                  type: binary(16)
+              - column:
+                  name: created_by_full_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surname
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(40)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_series
+                  type: VARCHAR(2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_number
+                  type: VARCHAR(7)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_issue_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_issue_place
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_id
+                  type: VARCHAR(14)
+            tableName: tbl_contract
+  - changeSet:
+      id: 1714434374405-5
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_decree
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date
+                  type: DATE
+              - column:
+                  name: created_by_id
+                  type: binary(16)
+              - column:
+                  name: created_by_full_name
+                  type: VARCHAR(255)
+            tableName: tbl_decree
+  - changeSet:
+      id: 1714434374405-6
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_decree_result
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(32)
+            tableName: tbl_decree_result
+  - changeSet:
+      id: 1714434374405-7
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_employee
+                  name: user_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: residential_address
+                  type: VARCHAR(255)
+            tableName: tbl_employee
+  - changeSet:
+      id: 1714434374405-8
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_explanatory_note
+                  name: id
+                  type: binary(16)
+              - column:
+                  name: employee_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: recipient
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: VARCHAR(512)
+              - column:
+                  name: updated
+                  type: DATETIME
+            tableName: tbl_explanatory_note
+  - changeSet:
+      id: 1714434374405-9
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_group
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: VARCHAR(6)
+            tableName: tbl_group
+  - changeSet:
+      id: 1714434374405-10
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_internal_regulation
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: VARCHAR(512)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: item_id
+                  type: binary(16)
+              - column:
+                  name: item_string
+                  type: VARCHAR(255)
+            tableName: tbl_internal_regulation
+  - changeSet:
+      id: 1714434374405-11
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_leisure
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: VARCHAR(200)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: col_day
+                  type: TINYINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: time
+                  type: TIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organizer_id
+                  type: binary(16)
+            tableName: tbl_leisure
+  - changeSet:
+      id: 1714434374405-12
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_parent
+                  name: id
+                  type: binary(16)
+              - column:
+                  name: dtype
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone_number
+                  type: VARCHAR(16)
+              - column:
+                  name: workplace
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: document_id
+                  type: VARCHAR(14)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surname
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(40)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(40)
+            tableName: tbl_parent
+  - changeSet:
+      id: 1714434374405-13
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiration_time
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_refresh_token
+                  name: user_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_refresh_token
+                  name: pair_id
+                  type: binary(16)
+            tableName: tbl_refresh_token
+  - changeSet:
+      id: 1714434374405-14
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_regulation_item
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: SMALLINT
+              - column:
+                  name: parent_id
+                  type: binary(16)
+            tableName: tbl_regulation_item
+  - changeSet:
+      id: 1714434374405-15
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_reporting_note
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: caretaker_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: r_date
+                  type: DATE
+              - column:
+                  name: approved_date
+                  type: DATETIME
+              - column:
+                  name: decree_id
+                  type: binary(16)
+            tableName: tbl_reporting_note
+  - changeSet:
+      id: 1714434374405-16
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_representative
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surname
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(40)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_series
+                  type: VARCHAR(2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_number
+                  type: VARCHAR(7)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_issue_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_issue_place
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: passport_id
+                  type: VARCHAR(14)
+            tableName: tbl_representative
+  - changeSet:
+      id: 1714434374405-17
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_role
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(64)
+            tableName: tbl_role
+  - changeSet:
+      id: 1714434374405-18
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_room
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: floor
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: capacity
+                  type: INT
+            tableName: tbl_room
+  - changeSet:
+      id: 1714434374405-19
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_student
+                  name: user_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: group_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: residential_address
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: graduation_year
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: grade_point_average
+                  type: DECIMAL(3,2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: has_gold_medal
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: was_in_military
+                  type: BOOLEAN
+              - column:
+                  name: is_student_union_member
+                  type: BOOLEAN
+              - column:
+                  name: about_college
+                  type: VARCHAR(255)
+              - column:
+                  name: hobbies
+                  type: VARCHAR(255)
+              - column:
+                  name: mother_id
+                  type: binary(16)
+              - column:
+                  name: father_id
+                  type: binary(16)
+              - column:
+                  name: surname_by
+                  type: VARCHAR(40)
+              - column:
+                  name: name_by
+                  type: VARCHAR(40)
+              - column:
+                  name: patronymic_by
+                  type: VARCHAR(40)
+            tableName: tbl_student
+  - changeSet:
+      id: 1714434374405-20
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_student_report
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: student_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: reporting_note_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: internal_regulation_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: v_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: VARCHAR(512)
+              - column:
+                  name: decree_result_id
+                  type: binary(16)
+              - column:
+                  name: explanatory_note_id
+                  type: binary(16)
+            tableName: tbl_student_report
+  - changeSet:
+      id: 1714434374405-21
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_user
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: card_id
+                  type: VARCHAR(64)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone_number
+                  type: VARCHAR(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(60)
+              - column:
+                  name: password_need_reset
+                  type: BOOLEAN
+              - column:
+                  name: email
+                  type: VARCHAR(128)
+              - column:
+                  name: email_confirmed
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: birthdate
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surname
+                  type: VARCHAR(40)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(40)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(40)
+            tableName: tbl_user
+  - changeSet:
+      id: 1714434374405-22
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_user_token
+                  name: id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: binary(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token_hash
+                  type: VARCHAR(60)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiration_time
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: purpose
+                  type: VARCHAR(255)
+            tableName: tbl_user_token
+  - changeSet:
+      id: 1714434374405-23
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tbl_user_type
+                  name: id
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(64)
+            tableName: tbl_user_type
+  - changeSet:
+      id: 1714434374405-24
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: number, parent_id
+            constraintName: uc_37cba89040cd1fc98d03b2e58
+            tableName: tbl_regulation_item
+  - changeSet:
+      id: 1714434374405-25
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: representative_id
+            constraintName: uc_tbl_contract_representative
+            tableName: tbl_contract
+  - changeSet:
+      id: 1714434374405-26
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_tbl_decree_result_name
+            tableName: tbl_decree_result
+  - changeSet:
+      id: 1714434374405-27
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: number
+            constraintName: uc_tbl_group_number
+            tableName: tbl_group
+  - changeSet:
+      id: 1714434374405-28
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: item_id
+            constraintName: uc_tbl_internal_regulation_item
+            tableName: tbl_internal_regulation
+  - changeSet:
+      id: 1714434374405-29
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: item_string
+            constraintName: uc_tbl_internal_regulation_item_string
+            tableName: tbl_internal_regulation
+  - changeSet:
+      id: 1714434374405-30
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_tbl_role_name
+            tableName: tbl_role
+  - changeSet:
+      id: 1714434374405-31
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: number
+            constraintName: uc_tbl_room_number
+            tableName: tbl_room
+  - changeSet:
+      id: 1714434374405-32
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: explanatory_note_id
+            constraintName: uc_tbl_student_report_explanatory_note
+            tableName: tbl_student_report
+  - changeSet:
+      id: 1714434374405-33
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: card_id
+            constraintName: uc_tbl_user_card
+            tableName: tbl_user
+  - changeSet:
+      id: 1714434374405-34
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_tbl_user_type_name
+            tableName: tbl_user_type
+  - changeSet:
+      id: 1714434374405-35
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: purpose
+            indexName: idx_purpose
+            tableName: tbl_user_token
+  - changeSet:
+      id: 1714434374405-36
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: termination_date
+            indexName: idx_termination_date
+            tableName: tbl_contract
+  - changeSet:
+      id: 1714434374405-37
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: created_by_id
+            baseTableName: tbl_contract
+            constraintName: FK_TBL_CONTRACT_ON_CREATED_BY
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+  - changeSet:
+      id: 1714434374405-38
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: representative_id
+            baseTableName: tbl_contract
+            constraintName: FK_TBL_CONTRACT_ON_REPRESENTATIVE
+            referencedColumnNames: id
+            referencedTableName: tbl_representative
+  - changeSet:
+      id: 1714434374405-39
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: room_id
+            baseTableName: tbl_contract
+            constraintName: FK_TBL_CONTRACT_ON_ROOM
+            referencedColumnNames: id
+            referencedTableName: tbl_room
+  - changeSet:
+      id: 1714434374405-40
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: student_id
+            baseTableName: tbl_contract
+            constraintName: FK_TBL_CONTRACT_ON_STUDENT
+            referencedColumnNames: user_id
+            referencedTableName: tbl_student
+  - changeSet:
+      id: 1714434374405-41
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: created_by_id
+            baseTableName: tbl_decree
+            constraintName: FK_TBL_DECREE_ON_CREATED_BY
+            referencedColumnNames: user_id
+            referencedTableName: tbl_employee
+  - changeSet:
+      id: 1714434374405-42
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tbl_employee
+            constraintName: FK_TBL_EMPLOYEE_ON_USER
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+  - changeSet:
+      id: 1714434374405-43
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_id
+            baseTableName: tbl_explanatory_note
+            constraintName: FK_TBL_EXPLANATORY_NOTE_ON_EMPLOYEE
+            referencedColumnNames: user_id
+            referencedTableName: tbl_employee
+  - changeSet:
+      id: 1714434374405-44
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: item_id
+            baseTableName: tbl_internal_regulation
+            constraintName: FK_TBL_INTERNAL_REGULATION_ON_ITEM
+            referencedColumnNames: id
+            referencedTableName: tbl_regulation_item
+  - changeSet:
+      id: 1714434374405-45
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organizer_id
+            baseTableName: tbl_leisure
+            constraintName: FK_TBL_LEISURE_ON_ORGANIZER
+            referencedColumnNames: user_id
+            referencedTableName: tbl_employee
+  - changeSet:
+      id: 1714434374405-46
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tbl_refresh_token
+            constraintName: FK_TBL_REFRESH_TOKEN_ON_USER
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+  - changeSet:
+      id: 1714434374405-47
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: parent_id
+            baseTableName: tbl_regulation_item
+            constraintName: FK_TBL_REGULATION_ITEM_ON_PARENT
+            referencedColumnNames: id
+            referencedTableName: tbl_regulation_item
+  - changeSet:
+      id: 1714434374405-48
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: caretaker_id
+            baseTableName: tbl_reporting_note
+            constraintName: FK_TBL_REPORTING_NOTE_ON_CARETAKER
+            referencedColumnNames: user_id
+            referencedTableName: tbl_employee
+  - changeSet:
+      id: 1714434374405-49
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: decree_id
+            baseTableName: tbl_reporting_note
+            constraintName: FK_TBL_REPORTING_NOTE_ON_DECREE
+            referencedColumnNames: id
+            referencedTableName: tbl_decree
+  - changeSet:
+      id: 1714434374405-50
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: father_id
+            baseTableName: tbl_student
+            constraintName: FK_TBL_STUDENT_ON_FATHER
+            referencedColumnNames: id
+            referencedTableName: tbl_parent
+  - changeSet:
+      id: 1714434374405-51
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: group_id
+            baseTableName: tbl_student
+            constraintName: FK_TBL_STUDENT_ON_GROUP
+            referencedColumnNames: id
+            referencedTableName: tbl_group
+  - changeSet:
+      id: 1714434374405-52
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: mother_id
+            baseTableName: tbl_student
+            constraintName: FK_TBL_STUDENT_ON_MOTHER
+            referencedColumnNames: id
+            referencedTableName: tbl_parent
+  - changeSet:
+      id: 1714434374405-53
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tbl_student
+            constraintName: FK_TBL_STUDENT_ON_USER
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+  - changeSet:
+      id: 1714434374405-54
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: decree_result_id
+            baseTableName: tbl_student_report
+            constraintName: FK_TBL_STUDENT_REPORT_ON_DECREE_RESULT
+            referencedColumnNames: id
+            referencedTableName: tbl_decree_result
+  - changeSet:
+      id: 1714434374405-55
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: explanatory_note_id
+            baseTableName: tbl_student_report
+            constraintName: FK_TBL_STUDENT_REPORT_ON_EXPLANATORY_NOTE
+            referencedColumnNames: id
+            referencedTableName: tbl_explanatory_note
+  - changeSet:
+      id: 1714434374405-56
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: internal_regulation_id
+            baseTableName: tbl_student_report
+            constraintName: FK_TBL_STUDENT_REPORT_ON_INTERNAL_REGULATION
+            referencedColumnNames: id
+            referencedTableName: tbl_internal_regulation
+  - changeSet:
+      id: 1714434374405-57
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: reporting_note_id
+            baseTableName: tbl_student_report
+            constraintName: FK_TBL_STUDENT_REPORT_ON_REPORTING_NOTE
+            referencedColumnNames: id
+            referencedTableName: tbl_reporting_note
+  - changeSet:
+      id: 1714434374405-58
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: student_id
+            baseTableName: tbl_student_report
+            constraintName: FK_TBL_STUDENT_REPORT_ON_STUDENT
+            referencedColumnNames: user_id
+            referencedTableName: tbl_student
+  - changeSet:
+      id: 1714434374405-59
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tbl_user_token
+            constraintName: FK_TBL_USER_TOKEN_ON_USER
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+  - changeSet:
+      id: 1714434374405-60
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: leisure_id
+            baseTableName: m2m_leisure_students
+            constraintName: fk_m2mleistu_on_leisure
+            referencedColumnNames: id
+            referencedTableName: tbl_leisure
+  - changeSet:
+      id: 1714434374405-61
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: students_id
+            baseTableName: m2m_leisure_students
+            constraintName: fk_m2mleistu_on_student
+            referencedColumnNames: user_id
+            referencedTableName: tbl_student
+  - changeSet:
+      id: 1714434374405-62
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: m2m_role_user_type
+            constraintName: fk_m2mrolusetyp_on_role
+            referencedColumnNames: id
+            referencedTableName: tbl_role
+  - changeSet:
+      id: 1714434374405-63
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_type_id
+            baseTableName: m2m_role_user_type
+            constraintName: fk_m2mrolusetyp_on_user_type
+            referencedColumnNames: id
+            referencedTableName: tbl_user_type
+  - changeSet:
+      id: 1714434374405-64
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: roles_id
+            baseTableName: m2m_user_roles
+            constraintName: fk_m2muserol_on_role
+            referencedColumnNames: id
+            referencedTableName: tbl_role
+  - changeSet:
+      id: 1714434374405-65
+      author: Vadim (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: m2m_user_roles
+            constraintName: fk_m2muserol_on_user
+            referencedColumnNames: id
+            referencedTableName: tbl_user
+
