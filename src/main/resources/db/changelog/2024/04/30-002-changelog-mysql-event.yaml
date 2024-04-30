@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Vadim
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - sql:
+            dbms: 'mysql'
+            endDelimiter: \nGO
+            splitStatements: true
+            stripComments: true
+            sql: SET GLOBAL event_scheduler = 1;
+  - changeSet:
+      id: 2
+      author: Vadim
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - sql:
+            dbms: 'mysql'
+            endDelimiter: \nGO
+            splitStatements: true
+            stripComments: true
+            sql: |
+              CREATE EVENT event_delete_expired_refresh_tokens
+                ON SCHEDULE 
+                  EVERY 1 DAY
+                  STARTS (DATE(NOW()) + INTERVAL 1 DAY + INTERVAL 1 HOUR)
+                ON COMPLETION PRESERVE
+              DO
+                DELETE FROM tbl_reftesh_token
+                WHERE expiration_time < NOW();

@@ -12,9 +12,11 @@ spring:
   jpa:
     properties:
       hibernate:
-        ddl-auto: update
+        ddl-auto: validate
         jdbc:
           time_zone: UTC
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
   mail:
     host: smtp.gmail.com
     port: 587
